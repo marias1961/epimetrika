@@ -1,17 +1,14 @@
 version: '3.8'
 
 services:
-  # ----------------------------------------------------------------------------
-  # 1. Reverse Proxy (Nginx)
-  # ----------------------------------------------------------------------------
   proxy:
-    image: nginx:alpine
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     container_name: calcupedev_proxy
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - portal
       - api_epi
@@ -24,9 +21,10 @@ services:
   # 2. Portal Web (Frontend Central Vite/React o HTML srv)
   # ----------------------------------------------------------------------------
   portal:
-    build: 
+    build:
       context: ./portal
       dockerfile: Dockerfile
+      network: host
     container_name: calcupedev_portal
     networks:
       - calcupedev_net
@@ -36,7 +34,7 @@ services:
   # 3. Micro-servicio: Epidemiología (R-Shiny)
   # ----------------------------------------------------------------------------
   api_epi:
-    build: 
+    build:
       context: ./api_epi
       dockerfile: Dockerfile
     container_name: calcupedev_api_epi
@@ -48,7 +46,7 @@ services:
   # 4. Micro-servicio: Estadística (R-Shiny)
   # ----------------------------------------------------------------------------
   api_stat:
-    build: 
+    build:
       context: ./api_stat
       dockerfile: Dockerfile
     container_name: calcupedev_api_stat

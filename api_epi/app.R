@@ -112,15 +112,6 @@ ui <- page_navbar(
     uiOutput("home_content"),
     icon = icon("home")
   ),
-    nav_panel(
-      title = span(id = "sub_ec2", "Ensayos Clínicos 2 (Datos agregados)"),
-      ensayos_clinicos_2_UI("ec2_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_nnt_pt", "NNT en ECAs Personas-Tiempo"),
-      nnt_ec_pt_UI("nnt_pt_module")
-    )
-  ),
   nav_menu(
     title = span(id = "menu_ci", "Confusión e Interacción"),
     nav_panel(
@@ -134,15 +125,6 @@ ui <- page_navbar(
     nav_panel(
       title = span(id = "sub_ci_graph", "Confusión Interacción (Gráficos)"),
       conf_inter_graphics_UI("conf_inter_gr_module")
-    )
-  ),
-    nav_panel(
-      title = span(id = "sub_diag1", "Pruebas Diagnósticas 1 (Tabla 2x2)"),
-      pruebas_diagnosticas_1_UI("diag_1_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_diag2", "Pruebas Diagnósticas 2 (Datos agregados)"),
-      pruebas_diagnosticas_2_UI("diag_2_module")
     )
   ),
   nav_menu(
@@ -238,15 +220,6 @@ ui <- page_navbar(
     nav_panel(
       title = span(id = "sub_nnt", "Otros Cálculos (NNT)"),
       otros_calculos_nnt_UI("nnt_module")
-    )
-  ),
-    nav_panel(
-      title = span(id = "sub_kappa", "Concordancia Kappa"),
-      kappa_UI("kappa_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_cci_multi", "CCI Múltiples Observadores"),
-      cci_multi_UI("cci_multi_module")
     )
   )
 )

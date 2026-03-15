@@ -21,7 +21,7 @@ source("apps/Pruebas_Diagnosticas_1/app.R")
 source("apps/Pruebas_Diagnosticas_2/app.R")
 source("apps/IC_Mediana/app.R")
 source("apps/Tamano_Muestral/app.R")
-# 
+#
 # Define UI
 ui <- page_navbar(
   title = "",
@@ -113,15 +113,6 @@ ui <- page_navbar(
       nnt_ec_pt_UI("nnt_pt_module")
     )
   ),
-    nav_panel(
-      title = span(id = "sub_ci_complex", "Confusión e Interacción (Complejo)"),
-      confusion_interaccion_UI("ci_complex_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_ci_graph", "Confusión Interacción (Gráficos)"),
-      conf_inter_graphics_UI("conf_inter_gr_module")
-    )
-  ),
   nav_menu(
     title = span(id = "menu_diag", "Pruebas Diagnósticas"),
     nav_panel(
@@ -135,70 +126,6 @@ ui <- page_navbar(
     nav_panel(
       title = span(id = "sub_diag2", "Pruebas Diagnósticas 2 (Datos agregados)"),
       pruebas_diagnosticas_2_UI("diag_2_module")
-    )
-  ),
-    nav_panel(
-      title = span(id = "sub_coh_emp", "Cohortes Emparejados"),
-      cohortes_emparejados_UI("cohortes_emp_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh1", "Cohortes 1 (Tabla 2x2)"),
-      cohortes_1_UI("coh_1_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh2", "Cohortes 2 (Datos agregados)"),
-      cohortes_2_UI("coh_2_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh3", "Cohortes 3 (Población-tiempo)"),
-      cohortes_3_UI("coh_3_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh_poly", "Riesgo Cohorte Politomica"),
-      cohort_polytomous_risk_UI("cohort_poly_risk_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh_trend", "Tendencias Cohortes (Persona-Tiempo)"),
-      cohortes_politomica_UI("cohortes_pol_mod_pt")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh_strat_pt", "Cohorte Estrat. Persona-Tiempo"),
-      cohorte_estrat_pt_UI("cohorte_pt_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_coh_strat_cnt", "Cohorte Estratificada (Conteo)"),
-      cohort_strat_count_UI("cohort_strat_cnt_module")
-    )
-  ),
-    nav_panel(
-      title = span(id = "sub_cc2", "Casos y Controles 2 (Datos agregados)"),
-      casos_controles_2_UI("cc_2_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_cc_emp", "Casos y Controles Emparejados"),
-      cc_emparejados_UI("cc_emp_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_cc_strat", "Casos y Controles Estratificados"),
-      casos_controles_estrat_UI("cc_estrat_module")
-    )
-  ),
-    nav_panel(
-      title = span(id = "sub_trans_strat", "Transversal Estratificado"),
-      cross_sectional_UI("cross_sec_module")
-    )
-  ),
-    nav_panel(
-      title = span(id = "sub_ecol_other", "Otros modelos ecológicos"),
-      ecologico_UI("ecol_other_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_ecol_agg", "Ecológicos agregados"),
-      ecologicos_agregados_UI("ecol_agg_module")
-    ),
-    nav_panel(
-      title = span(id = "sub_ecol_mult", "Ecológicos multivariable"),
-      ecologicos_multivariable_UI("ecol_mult_module")
     )
   ),
   nav_menu(

@@ -1,9 +1,20 @@
 import sys
 import re
 
-def clean_app_r(filepath, mode):
+def filter_menu(content, menus_to_remove):
+    for menu in menus_to_remove:
+        # Match `nav_menu( title = span(id = "menu_id", "Title"),`
+        # and delete everything until the closing parenthesis `  ),`
+        # This assumes formatting is consistent with exactly 2 spaces indentation at the end
+        pattern = r'\s*nav_menu\(\s*title = span\(id = "' + menu + r'".*?\n\s*\)(?:,\s*\n\s*\)|,\s*\n|\n\s*\)|\n)'
+        
+        # We need a more robust way to match balanced blocks.
+        # Since this is R code, we can read lines and count parenthesis to delete blocks
+        pass
+
+def robust_clean_app_r(filepath, mode):
     with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
+        lines = f.readlines()
 
     epi_removes = [
         "Ensayos_Clinicos_1", "Ensayos_Clinicos_2", "NNT_EC_PT", 
@@ -11,77 +22,85 @@ def clean_app_r(filepath, mode):
         "IC_Mediana", "Kappa", "CCI_multiples_obs", "Tamano_Muestral"
     ]
     
-    # We remove Ensayos, Diagnosticas, Stat, and Sample Size from EPI
-    if mode == "epi":
-        # Remove sources
-        for app in epi_removes:
-            content = re.sub(r'source\("apps/' + app + r'/app\.R"\)\n?', '', content)
-        
-        # Remove menu_ec block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_ec",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_diag block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_diag",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_stat block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_stat",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_sample block (doesn't have a trailing comma since it's the last one)
-        content = re.sub(r'\s*nav_panel\(\s*title = span\(id = "menu_sample".*?\n\s*\)\n', '\n', content, flags=re.DOTALL)
-        # Clean up possible trailing commas before the closing paren of page_navbar
-        content = re.sub(r',\s*\n\)', '\n)', content)
-        
-        # Remove server calls
-        server_calls = [
-            "fagan_Server", "ensayos_clinicos_1_Server", "ensayos_clinicos_2_Server",
-            "nnt_ec_pt_Server", "pruebas_diagnosticas_1_Server", "pruebas_diagnosticas_2_Server",
-            "ic_mediana_Server", "kappa_Server", "cci_multi_Server", "tamano_muestral_Server"
-        ]
-        for call in server_calls:
-            content = re.sub(r'\s*' + call + r'\(.*?\)\n?', '\n', content)
+    server_calls_epi = [
+        "fagan_Server", "ensayos_clinicos_1_Server", "ensayos_clinicos_2_Server",
+        "nnt_ec_pt_Server", "pruebas_diagnosticas_1_Server", "pruebas_diagnosticas_2_Server",
+        "ic_mediana_Server", "kappa_Server", "cci_multi_Server", "tamano_muestral_Server"
+    ]
 
-    elif mode == "stat":
-        stat_keeps = epi_removes
-        
-        # Remove sources not in stat_keeps
-        # Find all sources
-        sources = re.findall(r'source\("apps/(.*?)/app\.R"\)', content)
-        for app in sources:
-            if app not in stat_keeps:
-                content = re.sub(r'source\("apps/' + re.escape(app) + r'/app\.R"\)\n?', '', content)
-                
-        # Remove menu_ci block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_ci",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_coh block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_coh",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_cc block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_cc",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_trans block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_trans",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_ecol block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_ecol",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        # Remove menu_other block
-        content = re.sub(r'\s*nav_menu\(\s*title = span\(id = "menu_other",.*?\n\s*\),', '', content, flags=re.DOTALL)
-        
-        # Ensure proper trailing comma cleanup
-        content = re.sub(r',\s*\n\)', '\n)', content)
+    server_calls_stat = [
+        "or_rr_Server", "fap_multivariable_Server", "confusion_interaccion_Server",
+        "cohortes_emparejados_Server", "cohort_polytomous_risk_Server",
+        "cohortes_politomica_Server", "cc_emparejados_Server",
+        "conf_inter_graphics_Server", "casos_controles_estrat_Server",
+        "cohorte_estrat_pt_Server", "cross_sectional_Server",
+        "cohort_strat_count_Server", "cohortes_1_Server", "cohortes_2_Server",
+        "cohortes_3_Server", "casos_controles_1_Server", "casos_controles_2_Server",
+        "estudios_transversales_Server", "ecologicos_observacionales_Server",
+        "ecologico_Server", "ecologicos_agregados_Server", "ecologicos_multivariable_Server",
+        "otros_calculos_nnt_Server"
+    ]
 
-        # Remove server calls not in stat
-        server_calls_to_remove = [
-            "or_rr_Server", "fap_multivariable_Server", "confusion_interaccion_Server",
-            "cohortes_emparejados_Server", "cohort_polytomous_risk_Server",
-            "cohortes_politomica_Server", "cc_emparejados_Server",
-            "conf_inter_graphics_Server", "casos_controles_estrat_Server",
-            "cohorte_estrat_pt_Server", "cross_sectional_Server",
-            "cohort_strat_count_Server", "cohortes_1_Server", "cohortes_2_Server",
-            "cohortes_3_Server", "casos_controles_1_Server", "casos_controles_2_Server",
-            "estudios_transversales_Server", "ecologicos_observacionales_Server",
-            "ecologico_Server", "ecologicos_agregados_Server", "ecologicos_multivariable_Server",
-            "otros_calculos_nnt_Server"
-        ]
-        for call in server_calls_to_remove:
-            content = re.sub(r'\s*' + call + r'\(.*?\)\n?', '\n', content)
+    new_lines = []
+    skip_mode = False
+    paren_level = 0
+    target_menus_epi = ["menu_ec", "menu_diag", "menu_stat", "menu_sample"]
+    target_menus_stat = ["menu_ci", "menu_coh", "menu_cc", "menu_trans", "menu_ecol", "menu_other"]
+    
+    menus_to_remove = target_menus_epi if mode == "epi" else target_menus_stat
+    servers_to_remove = server_calls_epi if mode == "epi" else server_calls_stat
 
+    menu_pattern = re.compile(r'nav_(menu|panel)\(\s*title = span\(id = "([^"]+)"')
+    server_pattern = re.compile(r'^\s*([a-zA-Z0-9_]+_Server)\(')
+    source_pattern = re.compile(r'source\("apps/([^/]+)/app\.R"\)')
+
+    for line in lines:
+        # Check for Sources
+        sm = source_pattern.search(line)
+        if sm:
+            app_name = sm.group(1)
+            if mode == "epi" and app_name in epi_removes:
+                continue
+            if mode == "stat" and app_name not in epi_removes:
+                continue
+        
+        # Check for Menus / Panels to skip
+        if not skip_mode:
+            mm = menu_pattern.search(line)
+            if mm:
+                menu_id = mm.group(2)
+                if menu_id in menus_to_remove:
+                    skip_mode = "ui"
+                    paren_level = line.count('(') - line.count(')')
+                    continue
+            
+            # Check for Servers to skip
+            svm = server_pattern.search(line)
+            if svm:
+                server_id = svm.group(1)
+                if server_id in servers_to_remove:
+                    skip_mode = "server"
+                    paren_level = line.count('(') - line.count(')')
+                    # Edge case where server call is one line e.g. server_call()
+                    if paren_level <= 0:
+                        skip_mode = False
+                    continue
+
+        if skip_mode:
+            paren_level += line.count('(') - line.count(')')
+            if paren_level <= 0:
+                skip_mode = False
+            continue
+            
+        new_lines.append(line)
+
+    # Post processing trailing commas in UI definition Before Page_navbar closes
+    content = "".join(new_lines)
+    content = re.sub(r',\s*\n(\s*\))', r'\n\1', content)
+    
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
 
 if __name__ == "__main__":
-    clean_app_r("api_epi/app.R", "epi")
-    clean_app_r("api_stat/app.R", "stat")
+    robust_clean_app_r("api_epi/app.R", "epi")
+    robust_clean_app_r("api_stat/app.R", "stat")
