@@ -11,41 +11,17 @@ library(jsonlite)
 if (file.exists("R/i18n_utils.R")) source("R/i18n_utils.R")
 
 # Source all 14 modules
-source("apps/Calculadora de OR_RR confusion_interaccion/app.R")
 source("apps/Nomograma_de_Fagan/app.R")
-source("apps/Calculo_de_FAP_en_estudios_multivariable/app.R")
 source("apps/Kappa/app.R")
-source("apps/Calculadora_confusion_interaccion/app.R")
-source("apps/Cohortes_emperajados_Shiny/app.R")
-source("apps/cohortes_politomico_Shiny/app.R")
-source("apps/Cohortes_persona_tiempo_politomica_Shiny/app.R")
-source("apps/Estudios Casos_Controles emparejdos_Shiny/app.R")
-source("apps/calculadora_confusion_interaccion_graficos_dic/app.R")
-source("apps/Casos_controles_estrat_Shiny/app.R")
-source("apps/Cohorte_estrat_persona_tiempo_Shiny/app.R")
-source("apps/Trasversal estratificado/app.R")
-source("apps/cH_estrat_shiny/app.R")
 source("apps/Ensayos_Clinicos_1/app.R")
 source("apps/Ensayos_Clinicos_2/app.R")
 source("apps/NNT_EC_PT/app.R")
 source("apps/CCI_multiples_obs/app.R")
-source("apps/Cohortes_1/app.R")
-source("apps/Cohortes_2/app.R")
-source("apps/Cohortes_3/app.R")
-source("apps/Casos_Controles_1/app.R")
-source("apps/Casos_Controles_2/app.R")
 source("apps/Pruebas_Diagnosticas_1/app.R")
 source("apps/Pruebas_Diagnosticas_2/app.R")
-source("apps/Estudios_Transversales/app.R")
 source("apps/IC_Mediana/app.R")
-source("apps/Otros_Calculos_NNT/app.R")
 source("apps/Tamano_Muestral/app.R")
-# source("apps/Estudios_Ecologicos/app.R")
-source("apps/Ecologicos_Observacionales/app.R")
-source("apps/Ecolologico_Shny_2/app.R")
-source("apps/Ecologicos_Agregados/app.R")
-source("apps/Ecologicos_Multivariable/app.R")
-
+# 
 # Define UI
 ui <- page_navbar(
   title = "",
@@ -137,12 +113,6 @@ ui <- page_navbar(
       nnt_ec_pt_UI("nnt_pt_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_ci", "Confusión e Interacción"),
-    nav_panel(
-      title = span(id = "sub_or_rr", "OR/RR Confusión Interacción"),
-      or_rr_UI("or_rr_module")
-    ),
     nav_panel(
       title = span(id = "sub_ci_complex", "Confusión e Interacción (Complejo)"),
       confusion_interaccion_UI("ci_complex_module")
@@ -167,12 +137,6 @@ ui <- page_navbar(
       pruebas_diagnosticas_2_UI("diag_2_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_coh", "Estudios de Cohortes"),
-    nav_panel(
-      title = span(id = "sub_fap", "FAP Multivariable"),
-      fap_multivariable_UI("fap_module")
-    ),
     nav_panel(
       title = span(id = "sub_coh_emp", "Cohortes Emparejados"),
       cohortes_emparejados_UI("cohortes_emp_module")
@@ -206,12 +170,6 @@ ui <- page_navbar(
       cohort_strat_count_UI("cohort_strat_cnt_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_cc", "Casos y Controles"),
-    nav_panel(
-      title = span(id = "sub_cc1", "Casos y Controles 1 (Tabla 2x2)"),
-      casos_controles_1_UI("cc_1_module")
-    ),
     nav_panel(
       title = span(id = "sub_cc2", "Casos y Controles 2 (Datos agregados)"),
       casos_controles_2_UI("cc_2_module")
@@ -225,23 +183,11 @@ ui <- page_navbar(
       casos_controles_estrat_UI("cc_estrat_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_trans", "Estudios Transversales"),
-    nav_panel(
-      title = span(id = "sub_trans_gen", "Estudios Transversales (General)"),
-      estudios_transversales_UI("transversal_ui")
-    ),
     nav_panel(
       title = span(id = "sub_trans_strat", "Transversal Estratificado"),
       cross_sectional_UI("cross_sec_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_ecol", "Estudios Ecológicos"),
-    nav_panel(
-      title = span(id = "sub_ecol_obs", "Ecológicos observacionales (Tasas)"),
-      ecologicos_observacionales_UI("ecol_obs_module")
-    ),
     nav_panel(
       title = span(id = "sub_ecol_other", "Otros modelos ecológicos"),
       ecologico_UI("ecol_other_module")
@@ -253,13 +199,6 @@ ui <- page_navbar(
     nav_panel(
       title = span(id = "sub_ecol_mult", "Ecológicos multivariable"),
       ecologicos_multivariable_UI("ecol_mult_module")
-    )
-  ),
-  nav_menu(
-    title = span(id = "menu_other", "Otros"),
-    nav_panel(
-      title = span(id = "sub_nnt", "Otros Cálculos (NNT)"),
-      otros_calculos_nnt_UI("nnt_module")
     )
   ),
   nav_menu(
@@ -759,42 +698,18 @@ server <- function(input, output, session) {
   })
 
   # All 14 module servers
-  or_rr_Server("or_rr_module", lang)
   fagan_Server("fagan_module", lang)
-  fap_multivariable_Server("fap_module", lang)
-  confusion_interaccion_Server("ci_complex_module", lang)
-  cohortes_emparejados_Server("cohortes_emp_module", lang)
-  cohort_polytomous_risk_Server("cohort_poly_risk_module", lang)
-  cohortes_politomica_Server("cohortes_pol_mod_pt", lang)
-  cc_emparejados_Server("cc_emp_module", lang)
-  conf_inter_graphics_Server("conf_inter_gr_module", lang)
-  casos_controles_estrat_Server("cc_estrat_module", lang)
-  cohorte_estrat_pt_Server("cohorte_pt_module", lang)
-  cross_sectional_Server("cross_sec_module", lang)
-  cohort_strat_count_Server("cohort_strat_cnt_module", lang)
   ensayos_clinicos_1_Server("ec1_module", lang)
   ensayos_clinicos_2_Server("ec2_module", lang)
   nnt_ec_pt_Server("nnt_pt_module", lang)
-  cohortes_1_Server("coh_1_module", lang)
-  cohortes_2_Server("coh_2_module", lang)
-  cohortes_3_Server("coh_3_module", lang)
-  casos_controles_1_Server("cc_1_module", lang)
-  casos_controles_2_Server("cc_2_module", lang)
   pruebas_diagnosticas_1_Server("diag_1_module", lang)
   pruebas_diagnosticas_2_Server("diag_2_module", lang)
-  estudios_transversales_Server("transversal_ui", lang)
   ic_mediana_Server("ic_med_module", lang)
   kappa_Server("kappa_module", lang)
   cci_multi_Server("cci_multi_module", lang)
-  ecologicos_observacionales_Server("ecol_obs_module", lang)
-  ecologico_Server("ecol_other_module", lang)
-  ecologicos_agregados_Server("ecol_agg_module", lang)
-  ecologicos_multivariable_Server("ecol_mult_module", lang)
 
   output$menu_nnt_pt_title_ui <- NULL # Removed
   output$menu_mediana_title_ui <- NULL # Removed
-
-  otros_calculos_nnt_Server("nnt_module", lang)
   tamano_muestral_Server("sample_module", lang)
 }
 

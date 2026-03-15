@@ -12,9 +12,7 @@ if (file.exists("R/i18n_utils.R")) source("R/i18n_utils.R")
 
 # Source all 14 modules
 source("apps/Calculadora de OR_RR confusion_interaccion/app.R")
-source("apps/Nomograma_de_Fagan/app.R")
 source("apps/Calculo_de_FAP_en_estudios_multivariable/app.R")
-source("apps/Kappa/app.R")
 source("apps/Calculadora_confusion_interaccion/app.R")
 source("apps/Cohortes_emperajados_Shiny/app.R")
 source("apps/cohortes_politomico_Shiny/app.R")
@@ -25,21 +23,13 @@ source("apps/Casos_controles_estrat_Shiny/app.R")
 source("apps/Cohorte_estrat_persona_tiempo_Shiny/app.R")
 source("apps/Trasversal estratificado/app.R")
 source("apps/cH_estrat_shiny/app.R")
-source("apps/Ensayos_Clinicos_1/app.R")
-source("apps/Ensayos_Clinicos_2/app.R")
-source("apps/NNT_EC_PT/app.R")
-source("apps/CCI_multiples_obs/app.R")
 source("apps/Cohortes_1/app.R")
 source("apps/Cohortes_2/app.R")
 source("apps/Cohortes_3/app.R")
 source("apps/Casos_Controles_1/app.R")
 source("apps/Casos_Controles_2/app.R")
-source("apps/Pruebas_Diagnosticas_1/app.R")
-source("apps/Pruebas_Diagnosticas_2/app.R")
 source("apps/Estudios_Transversales/app.R")
-source("apps/IC_Mediana/app.R")
 source("apps/Otros_Calculos_NNT/app.R")
-source("apps/Tamano_Muestral/app.R")
 # source("apps/Estudios_Ecologicos/app.R")
 source("apps/Ecologicos_Observacionales/app.R")
 source("apps/Ecolologico_Shny_2/app.R")
@@ -122,12 +112,6 @@ ui <- page_navbar(
     uiOutput("home_content"),
     icon = icon("home")
   ),
-  nav_menu(
-    title = span(id = "menu_ec", "Ensayos Clínicos"),
-    nav_panel(
-      title = span(id = "sub_ec1", "Ensayos Clínicos 1 (Tabla 2x2)"),
-      ensayos_clinicos_1_UI("ec1_module")
-    ),
     nav_panel(
       title = span(id = "sub_ec2", "Ensayos Clínicos 2 (Datos agregados)"),
       ensayos_clinicos_2_UI("ec2_module")
@@ -152,12 +136,6 @@ ui <- page_navbar(
       conf_inter_graphics_UI("conf_inter_gr_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_diag", "Pruebas Diagnósticas"),
-    nav_panel(
-      title = span(id = "sub_fagan", "Nomograma de Fagan"),
-      fagan_UI("fagan_module")
-    ),
     nav_panel(
       title = span(id = "sub_diag1", "Pruebas Diagnósticas 1 (Tabla 2x2)"),
       pruebas_diagnosticas_1_UI("diag_1_module")
@@ -262,12 +240,6 @@ ui <- page_navbar(
       otros_calculos_nnt_UI("nnt_module")
     )
   ),
-  nav_menu(
-    title = span(id = "menu_stat", "Calculadoras estadísticas"),
-    nav_panel(
-      title = span(id = "menu_stat_placeholder", "Intervalos de confianza para la mediana"),
-      ic_mediana_UI("ic_med_module")
-    ),
     nav_panel(
       title = span(id = "sub_kappa", "Concordancia Kappa"),
       kappa_UI("kappa_module")
@@ -276,10 +248,6 @@ ui <- page_navbar(
       title = span(id = "sub_cci_multi", "CCI Múltiples Observadores"),
       cci_multi_UI("cci_multi_module")
     )
-  ),
-  nav_panel(
-    title = span(id = "menu_sample", "Tamaño Muestral"),
-    tamano_muestral_UI("sample_module")
   )
 )
 
@@ -760,7 +728,6 @@ server <- function(input, output, session) {
 
   # All 14 module servers
   or_rr_Server("or_rr_module", lang)
-  fagan_Server("fagan_module", lang)
   fap_multivariable_Server("fap_module", lang)
   confusion_interaccion_Server("ci_complex_module", lang)
   cohortes_emparejados_Server("cohortes_emp_module", lang)
@@ -772,20 +739,12 @@ server <- function(input, output, session) {
   cohorte_estrat_pt_Server("cohorte_pt_module", lang)
   cross_sectional_Server("cross_sec_module", lang)
   cohort_strat_count_Server("cohort_strat_cnt_module", lang)
-  ensayos_clinicos_1_Server("ec1_module", lang)
-  ensayos_clinicos_2_Server("ec2_module", lang)
-  nnt_ec_pt_Server("nnt_pt_module", lang)
   cohortes_1_Server("coh_1_module", lang)
   cohortes_2_Server("coh_2_module", lang)
   cohortes_3_Server("coh_3_module", lang)
   casos_controles_1_Server("cc_1_module", lang)
   casos_controles_2_Server("cc_2_module", lang)
-  pruebas_diagnosticas_1_Server("diag_1_module", lang)
-  pruebas_diagnosticas_2_Server("diag_2_module", lang)
   estudios_transversales_Server("transversal_ui", lang)
-  ic_mediana_Server("ic_med_module", lang)
-  kappa_Server("kappa_module", lang)
-  cci_multi_Server("cci_multi_module", lang)
   ecologicos_observacionales_Server("ecol_obs_module", lang)
   ecologico_Server("ecol_other_module", lang)
   ecologicos_agregados_Server("ecol_agg_module", lang)
@@ -795,7 +754,6 @@ server <- function(input, output, session) {
   output$menu_mediana_title_ui <- NULL # Removed
 
   otros_calculos_nnt_Server("nnt_module", lang)
-  tamano_muestral_Server("sample_module", lang)
 }
 
 shinyApp(ui, server)
