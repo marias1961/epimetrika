@@ -24,7 +24,6 @@ services:
     build:
       context: ./portal
       dockerfile: Dockerfile
-      network: host
     container_name: calcupedev_portal
     networks:
       - calcupedev_net
