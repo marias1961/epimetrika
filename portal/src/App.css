@@ -1,0 +1,204 @@
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #2c3e50;
+  --nav-bg: #2980b9;
+  --nav-text: white;
+  --card-bg: white;
+  --border-color: #e0e0e0;
+  --hover-bg: #3498db;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.portal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  height: 60px;
+  background-color: var(--nav-bg);
+  color: var(--nav-text);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.navbar h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.navbar-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.lang-select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: none;
+  background: white;
+  color: var(--text-color);
+}
+
+.theme-toggle {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid white;
+  border-radius: 4px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hub-menu {
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hub-menu h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--nav-bg);
+}
+
+.hub-menu p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.module-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: left;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.module-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.module-card h3 {
+  margin-top: 0;
+  color: var(--nav-bg);
+  font-size: 1.5rem;
+}
+
+.module-card p {
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.module-card button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--nav-bg);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.module-card:hover button {
+  background: var(--hover-bg);
+}
+
+.module-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.module-card.disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.module-card.disabled button {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Iframe View */
+.iframe-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+}
+
+.iframe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  background: #ecf0f1;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: var(--nav-bg);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.module-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  /* El iframe cargará un entorno ya estructurado con Navbar superior si es r-shiny, 
+     así que al cargarlo mantendrá un look "nested". Podemos forzar ocultar los head 
+     en el futuro para que parezca single page */
+}

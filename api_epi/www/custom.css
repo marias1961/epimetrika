@@ -1,0 +1,1048 @@
+/* Custom CSS for Calcupedev */
+
+:root {
+    --app-bg: #2980b9;
+    --app-text: white;
+    --app-navbar-bg: #2980b9;
+    --app-link-color: rgba(255, 255, 255, 0.9);
+    --app-link-active-bg: rgba(255, 255, 255, 0.1);
+    --app-dropdown-active: #3498db;
+    --app-dropdown-hover: #ebf5fb;
+    --app-dropdown-hover-text: #2980b9;
+    --theme-label-color: #2c3e50;
+
+    /* Language Selector Variables */
+    --lang-card-bg: white;
+    --lang-card-border: #ecf0f1;
+    --lang-card-text: #2c3e50;
+    --lang-card-hover-bg: #f8f9fa;
+    --lang-card-active-bg: #ebf5fb;
+    --lang-card-active-text: #2980b9;
+
+    /* Tab Variables - Final High Contrast */
+    --tab-text-inactive: #2c3e50;
+    --tab-text-active: #ffffff;
+    --tab-border-active: #154360;
+    --tab-bg-active: #2980b9;
+    --tab-nav-border: #cbd5e0;
+}
+
+[data-bs-theme="dark"] {
+    --app-bg: #2c3e50;
+    --app-text: #ecf0f1;
+    --app-navbar-bg: #2c3e50;
+    --app-link-color: #ecf0f1;
+    --app-link-active-bg: rgba(255, 255, 255, 0.05);
+    --app-dropdown-active: #34495e;
+    --app-dropdown-hover: #3e5871;
+    --app-dropdown-hover-text: #ecf0f1;
+    --theme-label-color: #ecf0f1;
+
+    /* Language Selector Dark Mode */
+    --lang-card-bg: #34495e;
+    --lang-card-border: #4e6a85;
+    --lang-card-text: #ecf0f1;
+    --lang-card-hover-bg: #2c3e50;
+    --lang-card-active-border: #3498db;
+    --lang-card-active-bg: #2c3e50;
+    --lang-card-active-text: #3498db;
+
+    /* Tab Variables Dark Mode - Final High Contrast */
+    --tab-text-inactive: #cfd8dc;
+    --tab-text-active: #ffffff;
+    --tab-border-active: #5dade2;
+    --tab-bg-active: #3498db;
+    --tab-nav-border: #4e6a85;
+    /* Ensure it covers the full screen */
+}
+
+/* When home tab is active, style the body background */
+body.home-active {
+    background-color: var(--app-bg) !important;
+}
+
+/* Also target the main content area and scrolling containers */
+body.home-active .bslib-page-fill,
+body.home-active .tab-content,
+body.home-active .tab-pane {
+    background-color: var(--app-bg) !important;
+}
+
+/* Restore sidebar to its original background */
+body.home-active .bslib-sidebar-layout>.sidebar,
+body.home-active aside.sidebar,
+body.home-active .sidebar {
+    background-color: #fff !important;
+}
+
+[data-bs-theme="dark"] body.home-active .bslib-sidebar-layout>.sidebar,
+[data-bs-theme="dark"] body.home-active aside.sidebar,
+[data-bs-theme="dark"] body.home-active .sidebar,
+body.home-active [data-bs-theme="dark"] .bslib-sidebar-layout>.sidebar,
+body.home-active [data-bs-theme="dark"] aside.sidebar,
+body.home-active [data-bs-theme="dark"] .sidebar {
+    background-color: #2c3e50 !important;
+}
+
+/* Target the tab-pane container that holds the home content */
+.tab-pane:has(#home_content),
+.tab-pane:has(.home-container) {
+    position: relative;
+}
+
+#home_content {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Fixed background layer that covers entire viewport */
+#home_content::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--app-bg);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.home-container {
+    position: relative;
+    color: var(--app-text);
+    padding: 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: color 0.3s ease;
+    z-index: 1;
+}
+
+.home-welcome-text {
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 300;
+    /* Light weight */
+    margin-bottom: 20px;
+}
+
+.home-welcome-text strong {
+    font-weight: 600;
+}
+
+.home-logo-text {
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.home-footer {
+    font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.home-footer a {
+    color: white;
+    text-decoration: underline;
+}
+
+.home-links {
+    margin-top: 20px;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    text-transform: uppercase;
+}
+
+.home-links span {
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+/* Theme label styling */
+.theme-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--theme-label-color);
+}
+
+/* Navbar Customization */
+.navbar {
+    background-color: var(--app-navbar-bg) !important;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.navbar-nav .nav-link {
+    color: var(--app-link-color) !important;
+    font-size: 1.05em;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus,
+.navbar-nav .nav-link.active {
+    color: #fff !important;
+    background-color: var(--app-link-active-bg);
+    border-radius: 4px;
+}
+
+.navbar-brand {
+    display: none;
+    /* Hide if empty to save space */
+}
+
+/* Dropdown menu customization */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Open dropdowns on hover for desktop */
+@media (min-width: 768px) {
+    .navbar-nav .nav-item.dropdown:hover>.dropdown-menu {
+        display: block !important;
+        margin-top: 0;
+    }
+}
+
+/* Fix for dropdowns near the right edge: align them to the right */
+@media (min-width: 992px) {
+
+    /* Only on large screens where navbar is horizontal */
+    .navbar-nav .nav-item:nth-last-child(-n+4) .dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+}
+
+/* Active Dropdown Item Styling */
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: var(--app-dropdown-active) !important;
+    /* Lighter blue than navbar */
+    color: white !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--app-dropdown-hover) !important;
+    /* Very light blue for hover */
+    color: var(--app-dropdown-hover-text) !important;
+}
+
+/* --- Language Selector Design --- */
+
+/* Wrapper adjustment */
+.custom-lang-selector .shiny-options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.custom-lang-selector .radio {
+    margin: 0 !important;
+}
+
+.custom-lang-selector .radio label {
+    padding: 0;
+    width: 100%;
+}
+
+/* Hide default radio input */
+.custom-lang-selector input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* The visual card component (wrapper span) */
+.custom-lang-selector .radio label>span {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: var(--lang-card-bg);
+    border: 2px solid var(--lang-card-border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--lang-card-text);
+}
+
+/* Hover state */
+.custom-lang-selector .radio label:hover>span {
+    border-color: #bdc3c7;
+    background-color: var(--lang-card-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Checked/Active state */
+.custom-lang-selector input[type="radio"]:checked+span {
+    border-color: var(--lang-card-active-border);
+    background-color: var(--lang-card-active-bg);
+    color: var(--lang-card-active-text);
+    box-shadow: 0 4px 6px rgba(41, 128, 185, 0.15);
+}
+
+/* Inner elements */
+.lang-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.lang-flag {
+    font-size: 1.8rem;
+    margin-right: 15px;
+    line-height: 1;
+}
+
+.lang-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* --- Print Button Styles --- */
+.print-section {
+    margin-top: 10px;
+}
+
+.print-btn {
+    background-color: #2980b9;
+    color: white;
+    border: 2px solid #2980b9;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.print-btn:hover:not(.disabled) {
+    background-color: #3498db;
+    border-color: #3498db;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(41, 128, 185, 0.2);
+}
+
+.print-btn.disabled,
+.print-btn:disabled {
+    background-color: #bdc3c7;
+    border-color: #bdc3c7;
+    color: #7f8c8d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+[data-bs-theme="dark"] .print-btn {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+[data-bs-theme="dark"] .print-btn:hover:not(.disabled) {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+[data-bs-theme="dark"] .print-btn.disabled,
+[data-bs-theme="dark"] .print-btn:disabled {
+    background-color: #4a5568;
+    border-color: #4a5568;
+    color: #718096;
+}
+
+/* --- Print Media Queries --- */
+@media print {
+
+    /* Hide sidebar and navbar when printing */
+    .navbar,
+    nav.navbar,
+    .bslib-sidebar-layout>.sidebar,
+    aside.sidebar,
+    .sidebar,
+    .bslib-sidebar-toggle,
+    .print-section {
+        display: none !important;
+    }
+
+    /* Make main content full width */
+    .bslib-sidebar-layout>.main,
+    .tab-content,
+    .tab-pane {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 20px !important;
+    }
+
+    /* Remove backgrounds for printing */
+    body,
+    body.home-active,
+    .bslib-page-fill,
+    .tab-content,
+    .tab-pane {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    /* Style tables for printing */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    th,
+    td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
+
+    /* Ensure text is readable */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: black !important;
+    }
+
+    p,
+    span,
+    div {
+        color: black !important;
+    }
+
+    /* Page breaks */
+    .sidebarPanel,
+    .sidebar-panel {
+        display: none !important;
+    }
+
+    .mainPanel,
+    .main-panel {
+        width: 100% !important;
+    }
+}
+
+/* ========================================
+   CHAT WIDGET - Asistente IA Flotante
+   ======================================== */
+
+/* Widget Container */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    /* Moved to left as requested */
+    z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Toggle Button (Floating) */
+.chat-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(41, 128, 185, 0.4);
+    transition: all 0.3s ease;
+}
+
+.chat-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(41, 128, 185, 0.5);
+}
+
+.chat-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* Hide toggle when chat is open */
+.chat-widget:not(.minimized) .chat-toggle-btn {
+    display: none;
+}
+
+/* Chat Window */
+.chat-window {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    /* Moved to left */
+    width: 380px;
+    height: 500px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Hidden when minimized */
+.chat-widget.minimized .chat-window {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+/* Chat Header */
+.chat-header {
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: grab;
+    user-select: none;
+}
+
+.chat-header:active {
+    cursor: grabbing;
+}
+
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.chat-header-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-btn-icon {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.chat-btn-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Messages Container */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f8f9fa;
+}
+
+/* Individual Messages */
+.chat-message {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    animation: messageSlide 0.3s ease;
+}
+
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-message.user {
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-message.assistant {
+    background: white;
+    color: #2c3e50;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chat-message.thinking {
+    font-style: italic;
+    color: #7f8c8d;
+}
+
+.chat-message.thinking::after {
+    content: '';
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+
+    0%,
+    20% {
+        content: '.';
+    }
+
+    40% {
+        content: '..';
+    }
+
+    60%,
+    100% {
+        content: '...';
+    }
+}
+
+/* Input Area */
+.chat-input-area {
+    display: flex;
+    padding: 12px;
+    gap: 10px;
+    background: white;
+    border-top: 1px solid #ecf0f1;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #ecf0f1;
+    border-radius: 24px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.chat-input-area input:focus {
+    border-color: #3498db;
+}
+
+.chat-input-area input::placeholder {
+    color: #bdc3c7;
+}
+
+.chat-send-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.chat-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
+}
+
+.chat-send-btn:active {
+    transform: scale(0.95);
+}
+
+/* ========================================
+   CHAT WIDGET - Dark Mode
+   ======================================== */
+
+[data-bs-theme="dark"] .chat-window {
+    background: #2c3e50;
+}
+
+[data-bs-theme="dark"] .chat-header {
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+}
+
+[data-bs-theme="dark"] .chat-messages {
+    background: #1a252f;
+}
+
+[data-bs-theme="dark"] .chat-message.assistant {
+    background: #34495e;
+    color: #ecf0f1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .chat-message.thinking {
+    color: #95a5a6;
+}
+
+[data-bs-theme="dark"] .chat-input-area {
+    background: #2c3e50;
+    border-top-color: #34495e;
+}
+
+[data-bs-theme="dark"] .chat-input-area input {
+    background: #1a252f;
+    border-color: #34495e;
+    color: #ecf0f1;
+}
+
+[data-bs-theme="dark"] .chat-input-area input:focus {
+    border-color: #3498db;
+}
+
+[data-bs-theme="dark"] .chat-input-area input::placeholder {
+    color: #7f8c8d;
+}
+
+[data-bs-theme="dark"] .chat-toggle-btn {
+    background: linear-gradient(135deg, #1a252f 0%, #34495e 100%);
+}
+
+/* ========================================
+   CHAT WIDGET - Responsive
+   ======================================== */
+
+@media (max-width: 480px) {
+    .chat-window {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 100px);
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        border-radius: 12px;
+    }
+
+    .chat-toggle-btn {
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* Hide chat on print */
+@media print {
+    .chat-widget {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   INTERACTIVE PRINT SYSTEM
+   ======================================== */
+
+/* Template hidden on screen */
+.print-template {
+    display: none !important;
+}
+
+/* Printable Section - Basic Styling for Template */
+.printable-section {
+    margin-bottom: 20px;
+}
+
+/* Print Media Queries */
+@media print {
+
+    /* Ensure visible */
+    .print-template {
+        display: block !important;
+    }
+
+    /* Hide all other content */
+    body> :not(.print-template) {
+        display: none;
+    }
+}
+
+/* ========================================
+   TAB PANELS (nav-tabs) STYLING - FINAL HIGH CONTRAST
+   ======================================== */
+
+.nav-tabs {
+    border-bottom: 2px solid var(--tab-nav-border) !important;
+    margin-bottom: 20px;
+    gap: 8px;
+    /* Increased gap */
+}
+
+/* Base link styling */
+.nav-tabs .nav-item .nav-link {
+    color: var(--tab-text-inactive) !important;
+    border: 1px solid var(--tab-nav-border) !important;
+    border-bottom: none !important;
+    font-weight: 600 !important;
+    padding: 10px 18px !important;
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-radius: 8px 8px 0 0 !important;
+    margin-bottom: -2px;
+}
+
+/* Hover state */
+.nav-tabs .nav-item .nav-link:hover {
+    background-color: var(--app-link-active-bg) !important;
+    border-color: var(--tab-border-active) !important;
+}
+
+/* ACTIVE STATE - ULTRA HIGH CONTRAST */
+.nav-tabs .nav-item .nav-link.active {
+    color: var(--tab-text-active) !important;
+    background-color: var(--tab-bg-active) !important;
+    border-color: var(--tab-bg-active) !important;
+    border-bottom: 3px solid var(--tab-border-active) !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode tweaks for active state */
+[data-bs-theme="dark"] .nav-tabs .nav-item .nav-link.active {
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Fix for nested or specific module tabs */
+.tabsetPanel .nav-tabs {
+    margin-top: 15px;
+}
+
+/* Metodix Chat Styles */
+.metodix-avatar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.chat-toggle-btn:hover .metodix-avatar {
+    transform: scale(1.1);
+}
+
+.chat-message.assistant {
+    background-color: #f8f9fa;
+    border-left: 4px solid #2c3e50;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 4px 12px 12px 4px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.chat-message.user {
+    background-color: #e3f2fd;
+    border-right: 4px solid #1976d2;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 12px 4px 4px 12px;
+    text-align: right;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.chat-message.thinking {
+    font-style: italic;
+    color: #666;
+}
+
+/* Forced Resize styles for Chat Window */
+.chat-window {
+    resize: both !important;
+    overflow: hidden !important;
+    min-width: 300px !important;
+    min-height: 350px !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+/* =============================================
+   TAMAÑO MUESTRAL - Dual-Pane Layout System
+   ============================================= */
+
+/* 1. The wrapper div is the master height anchor.
+      max-height keeps it within viewport; no overflow:hidden so small
+      windows can still reach content via normal page scroll. */
+#tm-layout-wrapper {
+    height: calc(100vh - 120px);
+    min-height: 300px;
+    /* Never collapse below usable size */
+}
+
+/* On very small screens (navbar wraps to 2+ lines), let the page scroll normally */
+@media (max-height: 550px) {
+    #tm-layout-wrapper {
+        height: auto;
+        min-height: 400px;
+    }
+}
+
+/* 2. sidebarLayout() generates container-fluid > row.
+      Both must inherit the full height from the wrapper. */
+#tm-layout-wrapper .container-fluid {
+    height: 100%;
+    padding: 0;
+}
+
+#tm-layout-wrapper .row {
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* 3. LEFT PANEL: Sidebar with fixed header + scrollable list */
+#tm-internal-sidebar {
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding: 20px 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.02);
+}
+
+/* 4. RIGHT PANEL: Independent scrolling for content/methodology */
+.tm-main-panel {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 50px;
+}
+
+#tm-internal-sidebar .shiny-html-output {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+[data-bs-theme="dark"] #tm-internal-sidebar {
+    background-color: #2c3e50;
+    border-right-color: #3e4444;
+}
+
+.tm-selection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overscroll-behavior: contain;
+    /* Prevents scroll chaining to the main page */
+}
+
+.tm-selection-list .tm-calc-link {
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+    border-radius: 8px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.tm-selection-list .tm-calc-link:hover {
+    background-color: #ebf5fb;
+    color: #2980b9;
+    transform: translateX(3px);
+}
+
+.tm-selection-list .tm-calc-link.active {
+    background-color: #2980b9;
+    color: white !important;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(41, 128, 185, 0.3);
+}
+
+[data-bs-theme="dark"] .tm-selection-list .tm-calc-link {
+    color: #ecf0f1;
+}
+
+[data-bs-theme="dark"] .tm-selection-list .tm-calc-link:hover {
+    background-color: #34495e;
+    color: #3498db;
+}
+
+[data-bs-theme="dark"] .tm-selection-list .tm-calc-link.active {
+    background-color: #3498db;
+    color: white !important;
+}
+
+#tm-methodology-note {
+    background-color: #fffbe6;
+    border-left: 5px solid #f1c40f;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+[data-bs-theme="dark"] #tm-methodology-note {
+    background-color: #3e4444;
+    border-left-color: #f1c40f;
+    color: #ecf0f1;
+}
+
+.math-display {
+    text-align: center;
+    padding: 15px;
+    background: white;
+    margin: 10px 0;
+    border-radius: 4px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+[data-bs-theme="dark"] .math-display {
+    background: #1a252f;
+    color: #ecf0f1;
+}
+
+.interpretation-box {
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #c8e6c9;
+    margin-bottom: 20px;
+}
+
+[data-bs-theme="dark"] .interpretation-box {
+    background-color: #1b4d3e;
+    border-color: #2e7d32;
+    color: #ecf0f1;
+}
