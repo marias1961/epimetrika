@@ -4,43 +4,90 @@ library(shiny)
 casos_controles_1_UI <- function(id) {
   ns <- NS(id)
   tagList(
-    sidebarLayout(
-      sidebarPanel(
-        h4(id = ns("title_obs"), "Datos observados"),
+    layout_sidebar(
+      fillable = FALSE,
+      sidebar = sidebar(
+        width = 400,
+        bg = "var(--sidebar-bg, #f8f9fa)",
+        h4(id = ns("title_obs"), "Datos observados", class = "sidebar-section-title"),
         tagList(
-          # HTML Table structure hard to translate with just ID replace if we don't wrap text.
-          # But for now, let's leave the pre block or use a dynamic UI if strictly needed.
-          # The user asked for "revisa". The pre block is hard-coded text.
-          # I will skip translating the pre-formatted table for now as it's just labels 'Casos/Controles'.
-          # Actually, I should probably replace the pre block with a small tableOutput or just accept it's "universal".
-          # Better: I will use 'renderUI' for it if I want to be perfect, but let's stick to the Headers first.
+          # Placeholder para tabla resumen si se deseara en el futuro
         ),
-        div(style = "overflow-x: auto;", tableOutput(ns("guide_table"))),
-        numericInput(ns("a"), "Casos — Expuestos (a)", value = 60, min = 0, step = 1),
-        numericInput(ns("b"), "Casos — No expuestos (b)", value = 40, min = 0, step = 1),
-        numericInput(ns("c"), "Controles — Expuestos (c)", value = 30, min = 0, step = 1),
-        numericInput(ns("d"), "Controles — No expuestos (d)", value = 70, min = 0, step = 1),
-        hr(),
+        div(style = "overflow-x: auto; margin-bottom: 15px;", tableOutput(ns("guide_table"))),
+        
+        # Grid layout for inputs to save vertical space
+        layout_columns(
+          col_widths = c(6, 6),
+          numericInput(ns("a"), "Casos — Exp. (a)", value = 60, min = 0, step = 1),
+          numericInput(ns("c"), "Ctrl — Exp. (c)", value = 30, min = 0, step = 1),
+          numericInput(ns("b"), "Casos — No exp. (b)", value = 40, min = 0, step = 1),
+          numericInput(ns("d"), "Ctrl — No exp. (d)", value = 70, min = 0, step = 1)
+        ),
+        
+        hr(class = "sidebar-divider"),
         sliderInput(ns("alpha"), "Nivel de confianza", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
-        checkboxInput(ns("continuity"), "Usar corrección de continuidad en χ²", TRUE),
-        hr(),
-        h4(id = ns("title_opt"), "Datos poblacionales opcionales"),
-        numericInput(ns("Pe_pct"), "Pe (%, proporción expuestos en población)", value = NA, min = 0, max = 100, step = 0.1),
-        numericInput(ns("Pce_pct"), "Pce (%, proporción de casos expuestos)", value = NA, min = 0, max = 100, step = 0.1),
-        numericInput(ns("P0_pct"), "P0 (%, riesgo en no expuestos)", value = NA, min = 0, max = 100, step = 0.1)
+        checkboxInput(ns("continuity"), "Corrección de continuidad en χ²", TRUE),
+        
+        hr(class = "sidebar-divider"),
+        h4(id = ns("title_opt"), "Datos poblacionales opcionales", class = "sidebar-section-title"),
+        numericInput(ns("Pe_pct"), "Pe (%)", value = NA, min = 0, max = 100, step = 0.1),
+        numericInput(ns("Pce_pct"), "Pce (%)", value = NA, min = 0, max = 100, step = 0.1),
+        numericInput(ns("P0_pct"), "P0 (%)", value = NA, min = 0, max = 100, step = 0.1)
       ),
-      mainPanel(
-        h4(id = ns("res_2x2"), "Tabla 2×2"),
-        tableOutput(ns("tab2x2")),
-        hr(),
-        h4(id = ns("res_tests"), "Pruebas de significación"),
-        tableOutput(ns("tests")),
-        hr(),
-        h4(id = ns("res_or"), "Odds ratio (OR) y medidas derivadas"),
-        tableOutput(ns("tab_or")),
-        hr(),
-        h4(id = ns("res_fap"), "Fracciones atribuibles y números de impacto"),
-        tableOutput(ns("tab_fap"))
+      
+      # Main Content Area
+      div(class = "module-main-content",
+        layout_columns(
+          col_widths = c(6, 6, 12, 12),
+          
+          # Card 1: Tabla 2x2
+          card(
+            class = "premium-card",
+            card_header(
+              class = "premium-card-header bg-primary text-white",
+              icon("table"), span(id = ns("res_2x2"), "Tabla 2×2")
+            ),
+            card_body(
+              tableOutput(ns("tab2x2"))
+            )
+          ),
+          
+          # Card 2: Significance Tests
+          card(
+            class = "premium-card",
+            card_header(
+              class = "premium-card-header bg-info text-white",
+              icon("flask"), span(id = ns("res_tests"), "Pruebas de significación")
+            ),
+            card_body(
+              tableOutput(ns("tests"))
+            )
+          ),
+          
+          # Card 3: OR and derivatives
+          card(
+            class = "premium-card",
+            card_header(
+              class = "premium-card-header bg-success text-white",
+              icon("chart-line"), span(id = ns("res_or"), "Odds ratio (OR) y medidas derivadas")
+            ),
+            card_body(
+              tableOutput(ns("tab_or"))
+            )
+          ),
+          
+          # Card 4: Attributable fractions
+          card(
+            class = "premium-card",
+            card_header(
+              class = "premium-card-header bg-warning text-dark",
+              icon("percent"), span(id = ns("res_fap"), "Fracciones atribuibles y números de impacto")
+            ),
+            card_body(
+              tableOutput(ns("tab_fap"))
+            )
+          )
+        )
       )
     ),
     div(

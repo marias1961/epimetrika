@@ -120,7 +120,30 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    // Send theme update to iframe if it exists
+    const iframe = document.querySelector('.module-iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'theme', value: theme }, '*');
+    }
   }, [theme]);
+
+  useEffect(() => {
+    // Send lang update to iframe if it exists
+    const iframe = document.querySelector('.module-iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'lang', value: lang }, '*');
+    }
+  }, [lang]);
+
+  // When iframe loads, send current state to initialize it
+  const handleIframeLoad = () => {
+    setIframeLoaded(true);
+    const iframe = document.querySelector('.module-iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'theme', value: theme }, '*');
+      iframe.contentWindow.postMessage({ type: 'lang', value: lang }, '*');
+    }
+  };
 
   const openModule = (mod) => {
     setIframeLoaded(false);
@@ -157,6 +180,30 @@ export default function App() {
             title={theme === 'dark' ? t.theme_light : t.theme_dark}
           >
             {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
+          
+          <button
+            className="print-btn"
+            title={t.flag === '🇪🇸' ? 'Imprimir' : t.flag === '🇬🇧' ? 'Print' : t.flag === '🇧🇷' ? 'Imprimir' : '打印'}
+            onClick={() => {
+              const iframe = document.querySelector('.module-iframe');
+              if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ type: 'print' }, '*');
+              }
+            }}
+            disabled={!activeModule}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              fontSize: '1.2rem',
+              cursor: activeModule ? 'pointer' : 'not-allowed',
+              opacity: activeModule ? 1 : 0.5,
+              padding: '0 5px',
+              display: 'grid',
+              placeItems: 'center'
+            }}
+          >
+            🖨️
           </button>
         </div>
       </nav>
@@ -212,7 +259,7 @@ export default function App() {
               key={activeModule.path}
               src={activeModule.path}
               title={t[activeModule.titleKey]}
-              className={`module-iframe${iframeLoaded ? ' visible' : ''}`}
+              className={`module-iframe ${iframeLoaded ? 'visible' : ''}`}
               onLoad={() => setIframeLoaded(true)}
               allow="fullscreen"
             />

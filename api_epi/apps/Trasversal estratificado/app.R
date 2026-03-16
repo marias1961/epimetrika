@@ -188,7 +188,7 @@ cross_sectional_Server <- function(id, lang) {
         PR_estratos <- res3$massoc.detail$PR.strata.score %>%
           as.data.frame() %>%
           mutate(Medida = c(tr$row_pr_s1, tr$row_pr_s2))
-        PR_crudo <- res3$massoc.detail$PR.crude.miettinen %>%
+        PR_crudo <- res3$massoc.detail$PR.crude.score %>%
           as.data.frame() %>%
           mutate(Medida = tr$row_pr_crude)
         PR_mh <- res3$massoc.detail$PR.mh.wald %>%
@@ -261,8 +261,8 @@ cross_sectional_Server <- function(id, lang) {
 
         data.frame(
           Test = c(tr$test_homog_or_woolf, tr$test_homog_or_bd, tr$test_homog_pr_woolf),
-          Statistic = safe_round(c(res3$massoc.detail$OR.homog.woolf$statistic, res3$massoc.detail$OR.homog.brday$statistic, res3$massoc.detail$PR.homog.woolf$statistic), 3),
-          df = c(res3$massoc.detail$OR.homog.woolf$parameter, res3$massoc.detail$OR.homog.brday$parameter, res3$massoc.detail$PR.homog.woolf$df),
+          Statistic = safe_round(c(res3$massoc.detail$OR.homog.woolf$test.statistic, res3$massoc.detail$OR.homog.brday$test.statistic, res3$massoc.detail$PR.homog.woolf$test.statistic), 3),
+          df = c(res3$massoc.detail$OR.homog.woolf$df, res3$massoc.detail$OR.homog.brday$df, res3$massoc.detail$PR.homog.woolf$df),
           p_val = safe_round(c(res3$massoc.detail$OR.homog.woolf$p.value, res3$massoc.detail$OR.homog.brday$p.value, res3$massoc.detail$PR.homog.woolf$p.value), 5)
         ) %>% setNames(c(tr$col_test, tr$col_stat, tr$col_df, tr$col_pval))
       },
@@ -270,19 +270,67 @@ cross_sectional_Server <- function(id, lang) {
       bordered = TRUE
     )
     # ===== Print Template =====
+    output$tabla2_print <- renderTable({
+      req(lang())
+      tr <- get_translations(lang(), "transversal_estrat")
+      res3 <- res3_rx()
+      OR_estratos <- res3$massoc.detail$OR.strata.wald %>% as.data.frame() %>% mutate(Medida = c(tr$row_or_s1, tr$row_or_s2))
+      OR_crudo    <- res3$massoc.detail$OR.crude.wald   %>% as.data.frame() %>% mutate(Medida = tr$row_or_crude)
+      OR_mh       <- res3$massoc.detail$OR.mh.wald      %>% as.data.frame() %>% mutate(Medida = tr$row_or_mh)
+      PR_estratos <- res3$massoc.detail$PR.strata.score  %>% as.data.frame() %>% mutate(Medida = c(tr$row_pr_s1, tr$row_pr_s2))
+      PR_crudo    <- res3$massoc.detail$PR.crude.score  %>% as.data.frame() %>% mutate(Medida = tr$row_pr_crude)
+      PR_mh       <- res3$massoc.detail$PR.mh.wald       %>% as.data.frame() %>% mutate(Medida = tr$row_pr_mh)
+      bind_rows(OR_estratos, OR_crudo, OR_mh, PR_estratos, PR_crudo, PR_mh) %>% fmt_ci()
+    }, striped = TRUE, bordered = TRUE)
+    output$tabla3_print <- renderTable({
+      req(lang())
+      tr <- get_translations(lang(), "transversal_estrat")
+      res3 <- res3_rx()
+      RAE_estratos <- res3$massoc.detail$ARisk.strata.wald  %>% as.data.frame() %>% mutate(Medida = c(tr$row_ar_s1, tr$row_ar_s2))
+      RAE_crudo    <- res3$massoc.detail$ARisk.crude.wald    %>% as.data.frame() %>% mutate(Medida = tr$row_ar_crude)
+      RAP_estratos <- res3$massoc.detail$PARisk.strata.wald  %>% as.data.frame() %>% mutate(Medida = c(tr$row_par_s1, tr$row_par_s2))
+      RAP_crudo    <- res3$massoc.detail$PARisk.crude.wald   %>% as.data.frame() %>% mutate(Medida = tr$row_par_crude)
+      bind_rows(RAE_estratos, RAE_crudo, RAP_estratos, RAP_crudo) %>% fmt_ci()
+    }, striped = TRUE, bordered = TRUE)
+    output$tabla4_print <- renderTable({
+      req(lang())
+      tr <- get_translations(lang(), "transversal_estrat")
+      res3 <- res3_rx()
+      FAE_estratos <- res3$massoc.detail$AFRisk.strata.wald   %>% as.data.frame() %>% mutate(Medida = c(tr$row_af_s1, tr$row_af_s2))
+      FAE_cruda    <- res3$massoc.detail$AFRisk.crude.wald     %>% as.data.frame() %>% mutate(Medida = tr$row_af_crude)
+      FAP_estratos <- res3$massoc.detail$PAFRisk.strata.wald   %>% as.data.frame() %>% mutate(Medida = c(tr$row_paf_s1, tr$row_paf_s2))
+      FAP_cruda    <- res3$massoc.detail$PAFRisk.crude.wald    %>% as.data.frame() %>% mutate(Medida = tr$row_paf_crude)
+      bind_rows(FAE_estratos, FAE_cruda, FAP_estratos, FAP_cruda) %>% fmt_ci()
+    }, striped = TRUE, bordered = TRUE)
+    output$tabla_homogeneidad_print <- renderTable({
+      req(lang())
+      tr <- get_translations(lang(), "transversal_estrat")
+      res3 <- res3_rx()
+      data.frame(
+        Test = c(tr$test_homog_or_woolf, tr$test_homog_or_bd, tr$test_homog_pr_woolf),
+        Statistic = safe_round(c(res3$massoc.detail$OR.homog.woolf$test.statistic, res3$massoc.detail$OR.homog.brday$test.statistic, res3$massoc.detail$PR.homog.woolf$test.statistic), 3),
+        df = c(res3$massoc.detail$OR.homog.woolf$df, res3$massoc.detail$OR.homog.brday$df, res3$massoc.detail$PR.homog.woolf$df),
+        p_val = safe_round(c(res3$massoc.detail$OR.homog.woolf$p.value, res3$massoc.detail$OR.homog.brday$p.value, res3$massoc.detail$PR.homog.woolf$p.value), 5)
+      ) %>% setNames(c(tr$col_test, tr$col_stat, tr$col_df, tr$col_pval))
+    }, striped = TRUE, bordered = TRUE)
+
     output$print_view <- renderUI({
       req(lang())
       ns <- session$ns
       tr <- get_translations(lang(), "transversal_estrat")
       tagList(
         div(class = "printable-section", h3(tr$title)),
-        div(class = "printable-section", h4(tr$h_t2), tableOutput(ns("tabla2"))),
-        div(class = "printable-section", h4(tr$h_t3), tableOutput(ns("tabla3"))),
-        div(class = "printable-section", h4(tr$h_t4), tableOutput(ns("tabla4"))),
-        div(class = "printable-section", h4(tr$h_hom), tableOutput(ns("tabla_homogeneidad")))
+        div(class = "printable-section", h4(tr$h_t2), tableOutput(ns("tabla2_print"))),
+        div(class = "printable-section", h4(tr$h_t3), tableOutput(ns("tabla3_print"))),
+        div(class = "printable-section", h4(tr$h_t4), tableOutput(ns("tabla4_print"))),
+        div(class = "printable-section", h4(tr$h_hom), tableOutput(ns("tabla_homogeneidad_print")))
       )
     })
 
-    outputOptions(output, "print_view", suspendWhenHidden = FALSE)
+    outputOptions(output, "print_view",              suspendWhenHidden = FALSE)
+    outputOptions(output, "tabla2_print",            suspendWhenHidden = FALSE)
+    outputOptions(output, "tabla3_print",            suspendWhenHidden = FALSE)
+    outputOptions(output, "tabla4_print",            suspendWhenHidden = FALSE)
+    outputOptions(output, "tabla_homogeneidad_print", suspendWhenHidden = FALSE)
   })
 }

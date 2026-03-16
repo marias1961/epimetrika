@@ -4,30 +4,58 @@ library(shiny)
 cohortes_3_UI <- function(id) {
   ns <- NS(id)
   tagList(
-    sidebarLayout(
-      sidebarPanel(
-        h4(id = ns("title_data"), "Datos del estudio"),
-        numericInput(ns("a"), "Casos en expuestos (a)", value = 30, min = 0, step = 1),
-        numericInput(ns("pte"), "Persona-tiempo expuestos (PT_e)", value = 1200, min = 0, step = 1),
-        numericInput(ns("c"), "Casos en no expuestos (c)", value = 18, min = 0, step = 1),
-        numericInput(ns("pt0"), "Persona-tiempo no expuestos (PT_0)", value = 1500, min = 0, step = 1),
-        hr(),
+    layout_sidebar(
+      fillable = FALSE,
+      sidebar = sidebar(
+        width = 400,
+        bg = "var(--sidebar-bg, #f8f9fa)",
+        h4(id = ns("title_data"), "Datos del estudio", class = "sidebar-section-title"),
+        
+        # Grid layout for inputs
+        layout_columns(
+          col_widths = c(6, 6),
+          numericInput(ns("a"), "Casos — Exp. (a)", value = 30, min = 0, step = 1),
+          numericInput(ns("pte"), "PT expuestos  (PT_e)", value = 1200, min = 0, step = 1),
+          numericInput(ns("c"), "Casos — No exp. (c)", value = 18, min = 0, step = 1),
+          numericInput(ns("pt0"), "PT no exp. (PT_0)", value = 1500, min = 0, step = 1)
+        ),
+        
+        hr(class = "sidebar-divider"),
         sliderInput(ns("alpha"), "Nivel de confianza", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
-        numericInput(ns("base"), "Base para mostrar tasas (por ... persona-tiempo)", value = 1000, min = 1, step = 1)
+        numericInput(ns("base"), "Base de tasas (por ... pt)", value = 1000, min = 1, step = 1)
       ),
-      mainPanel(
-        h4(id = ns("h_rates"), "Tasas de incidencia"),
-        tableOutput(ns("tab_rates")),
-        hr(),
-        h4(id = ns("h_irr"), "Razón de tasas (RTI = IRR) y prueba de hipótesis"),
-        tableOutput(ns("tab_irr")),
-        hr(),
-        h4(id = ns("h_diff"), "Diferencia de tasas e impacto"),
-        tableOutput(ns("tab_diff")),
-        hr(),
-        h4(id = ns("h_frac"), "Fracciones atribuibles / prevenibles"),
-        tableOutput(ns("tab_frac")),
-        helpText(id = ns("help_pe"), "Pe (poblacional) se estima como PT_e / (PT_e + PT_0). Para factores protectores (RTI < 1) se muestra PPE/PPP; si se prefiere, puede interpretarse PAF negativa en valor absoluto.")
+      
+      # Main Content Area
+      div(class = "module-main-content",
+        layout_columns(
+          col_widths = c(6, 6, 6, 6, 12),
+          
+          card(
+            class = "premium-card",
+            card_header(class = "premium-card-header bg-primary text-white", icon("table"), span(id = ns("h_rates"), "Tasas de incidencia")),
+            card_body(tableOutput(ns("tab_rates")))
+          ),
+          
+          card(
+            class = "premium-card",
+            card_header(class = "premium-card-header bg-info text-white", icon("flask"), span(id = ns("h_irr"), "Razón de tasas")),
+            card_body(tableOutput(ns("tab_irr")))
+          ),
+          
+          card(
+            class = "premium-card",
+            card_header(class = "premium-card-header bg-success text-white", icon("chart-line"), span(id = ns("h_diff"), "Diferencia de tasas")),
+            card_body(tableOutput(ns("tab_diff")))
+          ),
+          
+          card(
+            class = "premium-card",
+            card_header(class = "premium-card-header bg-warning text-dark", icon("percent"), span(id = ns("h_frac"), "Fracciones atribuibles")),
+            card_body(tableOutput(ns("tab_frac")))
+          ),
+          
+          helpText(id = ns("help_pe"), "Pe (poblacional) se estima como PT_e / (PT_e + PT_0).")
+        )
       )
     ),
     div(
@@ -224,16 +252,87 @@ cohortes_3_Server <- function(id, lang) {
     })
 
     # ========= Print Logic =========
+    # Dedicated print outputs (avoid duplicate IDs with main view)
+    output$tab_rates_print <- renderTable({
+      k <- core()
+      tr <- get_translations(lang(), "cohortes_3")
+      df <- data.frame(
+        col1 = c(tr$rate_ie, tr$rate_i0, tr$rate_it, tr$pe_label),
+        col2 = c(
+          fmt_rate(k$rates$Ie, k$base, tr$rate_format),
+          fmt_rate(k$rates$I0, k$base, tr$rate_format),
+          fmt_rate(k$rates$It, k$base, tr$rate_format),
+          fmt_pct(k$Pe)
+        ),
+        check.names = FALSE
+      )
+      setNames(df, c(tr$col_measure, tr$col_value))
+    })
+    output$tab_irr_print <- renderTable({
+      k <- core()
+      tr <- get_translations(lang(), "cohortes_3")
+      df <- data.frame(
+        col1 = c(tr$rti_label, tr$ci_lo, tr$ci_hi, tr$z_h0, tr$chi_sq, tr$p_value),
+        col2 = c(
+          fmt_num(k$irr$irr), fmt_num(k$irr$lo), fmt_num(k$irr$hi),
+          fmt_num(k$tst$z), fmt_num(k$tst$chi2), fmt_num(k$tst$p, 4)
+        ),
+        check.names = FALSE
+      )
+      setNames(df, c(tr$col_measure, tr$col_value))
+    })
+    output$tab_diff_print <- renderTable({
+      k <- core()
+      tr <- get_translations(lang(), "cohortes_3")
+      NIT <- nit_from_rd(k$rd$rd)
+      df <- data.frame(
+        col1 = c(
+          sprintf(tr$delta_rate_fmt, k$base),
+          sprintf(tr$ci_lo_rate_fmt, k$base),
+          sprintf(tr$ci_hi_rate_fmt, k$base),
+          tr$pt_per_event
+        ),
+        col2 = c(
+          fmt_rate(k$rd$rd, k$base, tr$rate_format),
+          fmt_rate(k$rd$lo, k$base, tr$rate_format),
+          fmt_rate(k$rd$hi, k$base, tr$rate_format),
+          ifelse(is.na(NIT), NA, sprintf("%.1f %s", NIT, safe_tr(tr, "unit_pt_evt", "pt/evt")))
+        ),
+        check.names = FALSE
+      )
+      setNames(df, c(tr$col_measure, tr$col_value))
+    })
+    output$tab_frac_print <- renderTable({
+      k <- core()
+      tr <- get_translations(lang(), "cohortes_3")
+      IRR <- k$irr$irr
+      Pe  <- k$Pe
+      if (!is.na(IRR) && IRR >= 1) {
+        FAE <- fae_from_irr(IRR)
+        FAP <- fap_from_irr_pe(IRR, Pe)
+        df <- data.frame(col1 = c(tr$fae_formula, tr$fap_formula), col2 = c(fmt_pct(FAE), fmt_pct(FAP)), check.names = FALSE)
+      } else {
+        PPE <- if (!is.na(IRR)) ppe_from_irr(IRR) else NA
+        PPP <- if (!is.na(IRR) && !is.na(Pe)) ppp_from_irr_pe(IRR, Pe) else NA
+        df <- data.frame(col1 = c(tr$ppe_formula, tr$ppp_formula), col2 = c(fmt_pct(PPE), fmt_pct(PPP)), check.names = FALSE)
+      }
+      setNames(df, c(tr$col_measure, tr$col_value))
+    })
+
     output$print_view <- renderUI({
       tr <- get_translations(lang(), "cohortes_3")
       ns <- session$ns
       tagList(
-        div(class = "printable-section", h3(tr$h_rates), tableOutput(ns("tab_rates"))),
-        div(class = "printable-section", h3(tr$h_irr), tableOutput(ns("tab_irr"))),
-        div(class = "printable-section", h3(tr$h_diff), tableOutput(ns("tab_diff"))),
-        div(class = "printable-section", h3(tr$h_frac), tableOutput(ns("tab_frac")))
+        div(class = "printable-section", h3(tr$h_rates), tableOutput(ns("tab_rates_print"))),
+        div(class = "printable-section", h3(tr$h_irr),   tableOutput(ns("tab_irr_print"))),
+        div(class = "printable-section", h3(tr$h_diff),  tableOutput(ns("tab_diff_print"))),
+        div(class = "printable-section", h3(tr$h_frac),  tableOutput(ns("tab_frac_print")))
       )
     })
-    outputOptions(output, "print_view", suspendWhenHidden = FALSE)
+    outputOptions(output, "print_view",      suspendWhenHidden = FALSE)
+    outputOptions(output, "tab_rates_print", suspendWhenHidden = FALSE)
+    outputOptions(output, "tab_irr_print",   suspendWhenHidden = FALSE)
+    outputOptions(output, "tab_diff_print",  suspendWhenHidden = FALSE)
+    outputOptions(output, "tab_frac_print",  suspendWhenHidden = FALSE)
   })
 }

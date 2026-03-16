@@ -52,7 +52,7 @@ ui <- page_navbar(
     tags$script(src = "chat-widget.js?v=1.3"),
 
     # Script de UI e Impresión extraído a un archivo JS independiente
-    tags$script(src = "print-script.js"),
+    tags$script(src = "print-script.js?v=1.6"),
     tags$style(HTML("
       /* Page Break Visualization in Preview */
       .page-break-marker {
@@ -76,36 +76,6 @@ ui <- page_navbar(
         .printable-section { break-inside: avoid; } /* Avoid breaking inside sections */
       }
     "))
-  ),
-  sidebar = sidebar(
-    div(
-      class = "custom-lang-selector",
-      radioButtons("lang",
-        label = uiOutput("lbl_lang_selection", inline = TRUE),
-        choiceNames = list(
-          HTML("<div class='lang-item'><span class='lang-flag fi fi-es'></span> <span class='lang-text'>Español</span></div>"),
-          HTML("<div class='lang-item'><span class='lang-flag fi fi-gb'></span> <span class='lang-text'>English</span></div>"),
-          HTML("<div class='lang-item'><span class='lang-flag fi fi-pt'></span> <span class='lang-text'>Português</span></div>"),
-          HTML("<div class='lang-item'><span class='lang-flag fi fi-cn'></span> <span class='lang-text'>简体中文</span></div>")
-        ),
-        choiceValues = c("es", "en", "pt", "zh"),
-        selected = "es"
-      )
-    ),
-    hr(),
-    div(class = "theme-label", uiOutput("lbl_theme", inline = TRUE)),
-    uiOutput("theme_toggle_ui"),
-    hr(),
-    div(
-      class = "print-section",
-      div(class = "theme-label", uiOutput("lbl_print", inline = TRUE)),
-      actionButton("print_results",
-        label = HTML("<span style='font-size: 1.5rem;'>🖨️</span> <span id='print_btn_text'>Imprimir</span>"),
-        class = "btn print-btn disabled",
-        disabled = "disabled",
-        style = "width: 100%; padding: 10px; margin-top: 5px;"
-      )
-    )
   ),
   nav_panel(
     title = span(id = "home_tab_label", "Inicio"),
@@ -225,8 +195,16 @@ ui <- page_navbar(
 )
 
 server <- function(input, output, session) {
+  message("DEBUG: Server session started")
+  
+  observe({
+    message(paste("DEBUG: input$lang changed to:", input$lang))
+  })
+
   lang <- reactive({
-    input$lang
+    l <- if (is.null(input$lang)) "es" else input$lang
+    message(paste("DEBUG: lang reactive evaluated, value =", l))
+    l
   })
 
   # Proxy para el asistente Metodix (RAG)
@@ -274,7 +252,7 @@ server <- function(input, output, session) {
 
   nav_tr <- list(
     es = list(
-      home = "Inicio",
+      home_tab_label = "Inicio",
       lbl_lang_selection = "Seleccione Idioma",
       lbl_theme = "Tema",
       lbl_print = "Imprimir resultados",
@@ -332,7 +310,7 @@ server <- function(input, output, session) {
       print_btn_print = "Imprimir"
     ),
     en = list(
-      home = "Home",
+      home_tab_label = "Home",
       lbl_lang_selection = "Select Language",
       lbl_theme = "Theme",
       menu_stat = "Statistical Calculators",
@@ -390,7 +368,7 @@ server <- function(input, output, session) {
       print_btn_print = "Print"
     ),
     pt = list(
-      home = "Início",
+      home_tab_label = "Início",
       lbl_lang_selection = "Selecione o Idioma",
       lbl_theme = "Tema",
       menu_stat = "Calculadoras estatísticas",
@@ -448,7 +426,7 @@ server <- function(input, output, session) {
       print_btn_print = "Imprimir"
     ),
     zh = list(
-      home = "首页",
+      home_tab_label = "首页",
       lbl_lang_selection = "选择语言",
       lbl_theme = "主题",
       menu_stat = "统计计算器",
@@ -521,8 +499,13 @@ server <- function(input, output, session) {
 
   output$home_tab_label <- NULL # Removed
 
-  observeEvent(input$lang, {
+  observeEvent(lang(), {
+    message(paste("DEBUG: lang observer triggered, lang =", lang()))
     t <- nav_tr[[lang()]]
+    if (is.null(t)) {
+        message("DEBUG: nav_tr for lang is NULL!")
+        t <- nav_tr$es
+    }
     session$sendCustomMessage("updateNavTitles", t)
     # Also update print button text and title
     session$sendCustomMessage("updatePrintButton", t$print_btn)
@@ -533,7 +516,7 @@ server <- function(input, output, session) {
     session$sendCustomMessage("updatePrintBtnPrint", t$print_btn_print)
     # Sync language with chat widget
     session$sendCustomMessage("updateChatLanguage", lang())
-  })
+  }, ignoreInit = FALSE)
 
   # Custom Theme Toggle
   current_theme <- reactiveVal("light")
@@ -552,7 +535,7 @@ server <- function(input, output, session) {
 
     actionButton("toggle_theme",
       label = btn_label, title = btn_title,
-      class = "btn", style = "width: 100%; padding: 10px; background-color: transparent; border: none; cursor: pointer;"
+      class = "btn", style = "padding: 5px 10px; background-color: transparent; border: none; cursor: pointer; display: flex; align-items: center;"
     )
   })
 

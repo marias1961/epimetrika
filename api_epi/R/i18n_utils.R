@@ -23,6 +23,17 @@ I18N_DICTIONARY <- list(
       value = "Valor"
     ),
     en = list(
+      calculate = "Calculate",
+      results = "Results",
+      confidence_level = "Confidence Level",
+      significance_tests = "Significance Tests",
+      table_2x2 = "2x2 Table",
+      risk_measures = "Risk Measures",
+      impact_measures = "Impact Measures",
+      impact_numbers = "Impact Numbers",
+      optional = "Optional",
+      chi_sq = "Chi-squared",
+      fisher_ext = "Fisher's exact",
       measure = "Measure",
       value = "Value"
     ),
