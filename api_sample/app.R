@@ -11,9 +11,7 @@ library(jsonlite)
 if (file.exists("R/i18n_utils.R")) source("R/i18n_utils.R")
 
 # Source all 14 modules
-source("apps/Kappa/app.R")
-source("apps/CCI_multiples_obs/app.R")
-source("apps/IC_Mediana/app.R")
+source("apps/Tamano_Muestral/app.R")
 #
 # Define UI
 ui <- page_navbar(
@@ -92,16 +90,8 @@ ui <- page_navbar(
     icon = icon("home")
   ),
   nav_panel(
-    title = span(id = "menu_stat_placeholder", "Intervalos de confianza para la mediana"),
-    ic_mediana_UI("ic_med_module")
-  ),
-  nav_panel(
-    title = span(id = "sub_kappa", "Concordancia Kappa"),
-    kappa_UI("kappa_module")
-  ),
-  nav_panel(
-    title = span(id = "sub_cci_multi", "CCI Múltiples Observadores"),
-    cci_multi_UI("cci_multi_module")
+    title = span(id = "menu_sample", "Tamaño Muestral"),
+    tamano_muestral_UI("sample_module")
   )
 )
 
@@ -580,10 +570,8 @@ server <- function(input, output, session) {
     ))
   })
 
-  # All 14 module servers
-  ic_mediana_Server("ic_med_module", lang)
-  kappa_Server("kappa_module", lang)
-  cci_multi_Server("cci_multi_module", lang)
+  # Only Sample Size
+  tamano_muestral_Server("sample_module", lang)
 }
 
 shinyApp(ui, server)

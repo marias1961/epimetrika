@@ -35,6 +35,12 @@ source("apps/Ecologicos_Observacionales/app.R")
 source("apps/Ecolologico_Shny_2/app.R")
 source("apps/Ecologicos_Agregados/app.R")
 source("apps/Ecologicos_Multivariable/app.R")
+source("apps/Nomograma_de_Fagan/app.R")
+source("apps/Ensayos_Clinicos_1/app.R")
+source("apps/Ensayos_Clinicos_2/app.R")
+source("apps/NNT_EC_PT/app.R")
+source("apps/Pruebas_Diagnosticas_1/app.R")
+source("apps/Pruebas_Diagnosticas_2/app.R")
 
 # Define UI
 ui <- page_navbar(
@@ -164,6 +170,36 @@ ui <- page_navbar(
     nav_panel(
       title = span(id = "sub_trans_strat", "Transversal Estratificado"),
       cross_sectional_UI("cross_sec_module")
+    )
+  ),
+  nav_menu(
+    title = span(id = "menu_ec", "Ensayos Clínicos"),
+    nav_panel(
+      title = span(id = "sub_ec1", "Ensayos Clínicos 1 (Tabla 2x2)"),
+      ensayos_clinicos_1_UI("ec1_module")
+    ),
+    nav_panel(
+      title = span(id = "sub_ec2", "Ensayos Clínicos 2 (Datos agregados)"),
+      ensayos_clinicos_2_UI("ec2_module")
+    ),
+    nav_panel(
+      title = span(id = "sub_nnt_pt", "NNT en ECAs Personas-Tiempo"),
+      nnt_ec_pt_UI("nnt_pt_module")
+    )
+  ),
+  nav_menu(
+    title = span(id = "menu_diag", "Pruebas Diagnósticas"),
+    nav_panel(
+      title = span(id = "sub_fagan", "Nomograma de Fagan"),
+      fagan_UI("fagan_module")
+    ),
+    nav_panel(
+      title = span(id = "sub_diag1", "Pruebas Diagnósticas 1 (Tabla 2x2)"),
+      pruebas_diagnosticas_1_UI("diag_1_module")
+    ),
+    nav_panel(
+      title = span(id = "sub_diag2", "Pruebas Diagnósticas 2 (Datos agregados)"),
+      pruebas_diagnosticas_2_UI("diag_2_module")
     )
   ),
   nav_menu(
@@ -320,7 +356,7 @@ server <- function(input, output, session) {
       stat_coming_soon = "Coming Soon",
       lbl_print = "Print Results",
       print_btn = "Print",
-      print_title = "Calcupedev - Print Results",
+      print_title = "EpiMétrica - Print Results",
       print_header = "Epidemiological Calculator",
       print_preview = "Print Preview",
       menu_ec = "Clinical Trials",
@@ -436,7 +472,7 @@ server <- function(input, output, session) {
       stat_coming_soon = "即将推出",
       lbl_print = "打印结果",
       print_btn = "打印",
-      print_title = "Calcupedev - 打印结果",
+      print_title = "EpiMétrica - 打印结果",
       print_header = "流行病学计算器",
       print_preview = "打印预览",
       menu_ec = "临床试验",
@@ -552,16 +588,16 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("Bienvenido/a a <strong>Calcupedev</strong>, la herramienta de cálculo epidemiológico en pediatría.")
+          HTML("Bienvenido/a a <strong>EpiMétrica</strong>, el portal de apps de Epidemiología y Estadística.")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
           class = "home-footer",
-          p("Calcupedev v11. Notas de versión."),
+          p("EpiMétrica v11. Notas de versión."),
           p("Autor: Eduardo Ortega Páez. Pediatra. Comité de Pediatría Basada en la Evidencia. AEP."),
           p("Con el aval del Comité de Pediatría Basada en la Evidencia de la AEP y de la AEPAP."),
           p("Para comunicar cualquier tipo de error o sugerencia le agradeceríamos que escribiera a gatedu@gmail.com"),
-          p("Si utiliza la calculadora para publicar un trabajo científico, rogamos sea citada como: \"Calcupedev. Herramienta de cálculo epidemiológico en pediatría. E. Ortega Páez. Comité de Pediatría Basada en la Evidencia de la AEP. 2019."),
+          p("Si utiliza la calculadora para publicar un trabajo científico, rogamos sea citada como: \"EpiMétrica. Portal de apps de Epidemiología y Estadística. E. Ortega Páez. Comité de Pediatría Basada en la Evidencia de la AEP. 2019."),
           p("El autor no se responsabiliza del uso que pueda darse a la información derivada de esta aplicación. Se ha esforzado en que la información detallada en esta página sea lo más precisa y actualizada posible, pero dado los cambios constantes de la epidemiología podría ser que no sea completa o contenga algún error, por ello invitamos al usuario que los utilice con sentido crítico y compare los resultados.")
         ),
         div(
@@ -576,7 +612,7 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("Bem-vindo(a) ao <strong>Calcupedev</strong>, a ferramenta de cálculo epidemiológico em pediatria.")
+          HTML("Bem-vindo(a) ao <strong>EpiMétrica</strong>, o portal de aplicativos de Epidemiologia e Estatística.")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
@@ -585,7 +621,7 @@ server <- function(input, output, session) {
           p("Autor: Eduardo Ortega Páez. Pediatra. Comitê de Pediatria Baseada em Evidências. AEP."),
           p("Com o aval do Comitê de Pediatria Baseada em Evidências da AEP e da AEPAP."),
           p("Para comunicar qualquer tipo de erro ou sugestão, por favor escreva para gatedu@gmail.com"),
-          p("Se utilizar a calculadora para publicar um trabalho científico, solicitamos que seja citada como: \"Calcupedev. Ferramenta de cálculo epidemiológico em pediatria. E. Ortega Páez. Comitê de Pediatria Baseada em Evidências da AEP. 2019."),
+          p("Se utilizar a calculadora para publicar um trabajo científico, solicitamos que seja citada como: \"EpiMétrica. Portal de aplicativos de Epidemiologia e Estatística. E. Ortega Páez. Comitê de Pediatría Baseada em Evidências da AEP. 2019."),
           p("O autor não se responsabiliza pelo uso que possa ser dado às informações derivadas desta aplicação. Esforçou-se para que a informação detalhada nesta página seja o mais precisa e atualizada possível, mas dadas as constantes mudanças na epidemiologia, pode ser que não esteja completa ou contenha algum erro, por isso convidamos o usuário a utilizá-la com sentido crítico e comparar os resultados.")
         ),
         div(
@@ -600,12 +636,12 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("欢迎使用 <strong>Calcupedev</strong>，儿科流行病学计算工具。")
+          HTML("欢迎使用 <strong>EpiMetric</strong>，流行病学与统计应用门户。")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
           class = "home-footer",
-          p("Calcupedev v11. 版本说明。"),
+          p("EpiMétrica v11. 版本说明。"),
           p("作者：Eduardo Ortega Páez。儿科医生。AEP 循证儿科学委员会。"),
           p("得到 AEP 和 AEPAP 循证儿科学委员会的认可。"),
           p("如需报告任何错误或建议，请发送至 gatedu@gmail.com"),
@@ -624,16 +660,16 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("Welcome to <strong>Calcupedev</strong>, the epidemiological calculation tool in pediatrics.")
+          HTML("Welcome to <strong>EpiMétrica</strong>, the portal of apps for Epidemiology and Statistics.")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
           class = "home-footer",
-          p("Calcupedev v11. Release Notes."),
+          p("EpiMétrica v11. Release Notes."),
           p("Author: Eduardo Ortega Páez. Pediatrician. Evidence-Based Pediatrics Committee. AEP."),
           p("Endorsed by the Evidence-Based Pediatrics Committee of the AEP and AEPAP."),
           p("To report any errors or suggestions, please write to gatedu@gmail.com"),
-          p("If you use this calculator to publish a scientific paper, please cite it as: \"Calcupedev. Tool for epidemiological calculation in pediatrics. E. Ortega Páez. Evidence-Based Pediatrics Committee of the AEP. 2019."),
+          p("If you use this calculator to publish a scientific paper, please cite it as: \"EpiMétrica. Portal of apps for Epidemiology and Statistics. E. Ortega Páez. Evidence-Based Pediatrics Committee of the AEP. 2019."),
           p("The author is not responsible for the use that may be made of the information derived from this application. Efforts have been made to ensure that the information detailed on this page is as accurate and up-to-date as possible, but given the constant changes in epidemiology, it may not be complete or may contain errors, so we invite the user to use it with critical sense and compare the results.")
         ),
         div(
@@ -710,6 +746,14 @@ server <- function(input, output, session) {
   output$menu_mediana_title_ui <- NULL # Removed
 
   otros_calculos_nnt_Server("nnt_module", lang)
+  
+  # Moved modules
+  fagan_Server("fagan_module", lang)
+  ensayos_clinicos_1_Server("ec1_module", lang)
+  ensayos_clinicos_2_Server("ec2_module", lang)
+  nnt_ec_pt_Server("nnt_pt_module", lang)
+  pruebas_diagnosticas_1_Server("diag_1_module", lang)
+  pruebas_diagnosticas_2_Server("diag_2_module", lang)
 }
 
 shinyApp(ui, server)

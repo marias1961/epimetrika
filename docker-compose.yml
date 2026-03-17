@@ -12,6 +12,7 @@ services:
       - portal
       - api_epi
       - api_stat
+      - api_sample
     networks:
       - calcupedev_net
     restart: unless-stopped
@@ -48,6 +49,18 @@ services:
       context: ./api_stat
       dockerfile: Dockerfile
     container_name: calcupedev_api_stat
+    networks:
+      - calcupedev_net
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------------------
+  # 5. Micro-servicio: Tamaño Muestral (R-Shiny)
+  # ----------------------------------------------------------------------------
+  api_sample:
+    build:
+      context: ./api_sample
+      dockerfile: Dockerfile
+    container_name: calcupedev_api_sample
     networks:
       - calcupedev_net
     restart: unless-stopped

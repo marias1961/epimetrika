@@ -4,7 +4,7 @@ import './App.css';
 // ─── Traducciones del portal ────────────────────────────────────────────────
 const i18n = {
   es: {
-    tagline: 'Herramienta de cálculo epidemiológico en pediatría',
+    tagline: 'Portal de apps de Epidemiología y Estadística',
     subtitle: 'Selecciona un módulo para comenzar. Cada calculadora se ejecuta de forma independiente.',
     card_epi_title: 'Calculadoras Epidemiológicas',
     card_epi_desc: 'Estudios de cohortes, casos y controles, OR/RR, ecológicos, transversales y más.',
@@ -16,13 +16,13 @@ const i18n = {
     back: '← Volver',
     theme_dark: 'Oscuro',
     theme_light: 'Claro',
-    footer: 'Calcupedev V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: 'Cargando módulo…',
     assistant_hint: 'Asistente Metodix disponible dentro de cada módulo.',
     flag: '🇪🇸',
   },
   en: {
-    tagline: 'Epidemiological calculation tool in pediatrics',
+    tagline: 'Epidemiology and Statistics Apps Portal',
     subtitle: 'Select a module to get started. Each calculator runs independently.',
     card_epi_title: 'Epidemiological Calculators',
     card_epi_desc: 'Cohort studies, case-control, OR/RR, ecological, cross-sectional and more.',
@@ -34,13 +34,13 @@ const i18n = {
     back: '← Back',
     theme_dark: 'Dark',
     theme_light: 'Light',
-    footer: 'Calcupedev V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: 'Loading module…',
     assistant_hint: 'Metodix AI assistant available inside each module.',
     flag: '🇬🇧',
   },
   pt: {
-    tagline: 'Ferramenta de cálculo epidemiológico em pediatria',
+    tagline: 'Portal de aplicativos de Epidemiologia e Estatística',
     subtitle: 'Selecione um módulo para começar. Cada calculadora funciona de forma independente.',
     card_epi_title: 'Calculadoras Epidemiológicas',
     card_epi_desc: 'Estudos de coorte, caso-controle, OR/RR, ecológicos, transversais e mais.',
@@ -52,13 +52,13 @@ const i18n = {
     back: '← Voltar',
     theme_dark: 'Escuro',
     theme_light: 'Claro',
-    footer: 'Calcupedev V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: 'Carregando módulo…',
     assistant_hint: 'Assistente Metodix IA disponível dentro de cada módulo.',
     flag: '🇧🇷',
   },
   zh: {
-    tagline: '儿科流行病学计算工具',
+    tagline: '流行病学与统计应用门户',
     subtitle: '选择一个模块开始使用。每个计算器独立运行。',
     card_epi_title: '流行病学计算器',
     card_epi_desc: '队列研究、病例对照、OR/RR、生态学、横断面研究等。',
@@ -70,7 +70,7 @@ const i18n = {
     back: '← 返回',
     theme_dark: '深色',
     theme_light: '浅色',
-    footer: 'Calcupedev V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: '正在加载模块…',
     assistant_hint: 'Metodix AI 智能助手在每个模块中均可使用。',
     flag: '🇨🇳',
@@ -103,7 +103,7 @@ const MODULES = [
   },
   {
     key: 'sample',
-    path: '/api/stat/', // served within the stat module for now
+    path: '/api/sample/',
     icon: '🔬',
     color: 'card-sample',
     titleKey: 'card_sample_title',
@@ -158,7 +158,7 @@ export default function App() {
       <nav className="navbar">
         <div className="navbar-brand" onClick={goHome}>
           <span className="brand-icon">🩺</span>
-          <span className="brand-text">Calcupedev</span>
+          <span className="brand-text">EpiMétrica</span>
           <span className="brand-version">V2</span>
         </div>
 
@@ -214,7 +214,7 @@ export default function App() {
           /* ── HOME / HUB ─────────────────────────────── */
           <div className="hub">
             <div className="hero">
-              <h1 className="hero-title">Calcupedev</h1>
+              <h1 className="hero-title">EpiMétrica</h1>
               <p className="hero-tagline">{t.tagline}</p>
               <p className="hero-subtitle">{t.subtitle}</p>
             </div>
