@@ -1,59 +1,76 @@
-/* Custom CSS for EpiMétrica */
+/* Custom CSS for EpiMétrika */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --app-bg: #2980b9;
-    --app-text: white;
-    --app-navbar-bg: #2980b9;
-    --app-link-color: rgba(255, 255, 255, 0.9);
-    --app-link-active-bg: rgba(255, 255, 255, 0.1);
-    --app-dropdown-active: #3498db;
-    --app-dropdown-hover: #ebf5fb;
-    --app-dropdown-hover-text: #2980b9;
-    --theme-label-color: #2c3e50;
+    --font: 'Inter', system-ui, sans-serif;
+
+    /* Variables Modo Claro (Igual al Portal) */
+    --app-bg: #f0f4f8;
+    --app-text: #1c2433;
+    --app-navbar-bg: rgba(240, 244, 248, 0.88);
+    --app-link-color: #57606a;
+    --app-link-active-bg: rgba(31, 111, 235, 0.08);
+    --app-dropdown-active: #1f6feb;
+    --app-dropdown-hover: #f5f8ff;
+    --app-dropdown-hover-text: #1f6feb;
+    --theme-label-color: #1c2433;
 
     /* Language Selector Variables */
-    --lang-card-bg: white;
-    --lang-card-border: #ecf0f1;
-    --lang-card-text: #2c3e50;
-    --lang-card-hover-bg: #f8f9fa;
-    --lang-card-active-bg: #ebf5fb;
-    --lang-card-active-text: #2980b9;
+    --lang-card-bg: #ffffff;
+    --lang-card-border: rgba(0, 0, 0, 0.08);
+    --lang-card-text: #1c2433;
+    --lang-card-hover-bg: #f5f8ff;
+    --lang-card-active-bg: rgba(31, 111, 235, 0.05);
+    --lang-card-active-text: #1f6feb;
 
-    /* Tab Variables - Final High Contrast */
-    --tab-text-inactive: #2c3e50;
-    --tab-text-active: #ffffff;
-    --tab-border-active: #154360;
-    --tab-bg-active: #2980b9;
-    --tab-nav-border: #cbd5e0;
+    /* Tab Variables - Portal Style */
+    --tab-text-inactive: #57606a;
+    --tab-text-active: #1f6feb;
+    --tab-border-active: #1f6feb;
+    --tab-bg-active: transparent;
+    --tab-nav-border: rgba(0, 0, 0, 0.08);
 }
 
 [data-bs-theme="dark"] {
-    --app-bg: #2c3e50;
-    --app-text: #ecf0f1;
-    --app-navbar-bg: #2c3e50;
-    --app-link-color: #ecf0f1;
-    --app-link-active-bg: rgba(255, 255, 255, 0.05);
-    --app-dropdown-active: #34495e;
-    --app-dropdown-hover: #3e5871;
-    --app-dropdown-hover-text: #ecf0f1;
-    --theme-label-color: #ecf0f1;
+    /* Variables Modo Oscuro (Igual al Portal) */
+    --app-bg: #0d1117;
+    --app-text: #e6edf3;
+    --app-navbar-bg: rgba(13, 17, 23, 0.82);
+    --app-link-color: #8b949e;
+    --app-link-active-bg: rgba(88, 166, 255, 0.1);
+    --app-dropdown-active: #1f6feb;
+    --app-dropdown-hover: #1c2230;
+    --app-dropdown-hover-text: #58a6ff;
+    --theme-label-color: #e6edf3;
 
     /* Language Selector Dark Mode */
-    --lang-card-bg: #34495e;
-    --lang-card-border: #4e6a85;
-    --lang-card-text: #ecf0f1;
-    --lang-card-hover-bg: #2c3e50;
-    --lang-card-active-border: #3498db;
-    --lang-card-active-bg: #2c3e50;
-    --lang-card-active-text: #3498db;
+    --lang-card-bg: #161b22;
+    --lang-card-border: rgba(255, 255, 255, 0.08);
+    --lang-card-text: #e6edf3;
+    --lang-card-hover-bg: #1c2230;
+    --lang-card-active-border: #58a6ff;
+    --lang-card-active-bg: rgba(88, 166, 255, 0.1);
+    --lang-card-active-text: #58a6ff;
 
-    /* Tab Variables Dark Mode - Final High Contrast */
-    --tab-text-inactive: #cfd8dc;
-    --tab-text-active: #ffffff;
-    --tab-border-active: #5dade2;
-    --tab-bg-active: #3498db;
-    --tab-nav-border: #4e6a85;
-    /* Ensure it covers the full screen */
+    /* Tab Variables Dark Mode */
+    --tab-text-inactive: #8b949e;
+    --tab-text-active: #58a6ff;
+    --tab-border-active: #58a6ff;
+    --tab-bg-active: transparent;
+    --tab-nav-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Forzar la fuente del portal en toda la app */
+body {
+    font-family: var(--font) !important;
+}
+
+/* Aplicar el efecto "cristal" del portal a la barra superior */
+.navbar {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--tab-nav-border) !important;
 }
 
 /* When home tab is active, style the body background */
@@ -119,7 +136,7 @@ body.home-active [data-bs-theme="dark"] .sidebar {
     justify-content: space-between;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: color 0.3s ease;
-    z-index: 1;
+    z-index: 0;
 }
 
 .home-welcome-text {
@@ -177,6 +194,8 @@ body.home-active [data-bs-theme="dark"] .sidebar {
     border: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
+    position: relative !important;
+    z-index: 9999 !important;
 }
 
 .navbar-nav .nav-link {
@@ -197,10 +216,16 @@ body.home-active [data-bs-theme="dark"] .sidebar {
     /* Hide if empty to save space */
 }
 
+/* Evita que el contenedor de Shiny corte lo que sobresale */
+.bslib-page-navbar>.navbar {
+    overflow: visible !important;
+}
+
 /* Dropdown menu customization */
 .dropdown-menu {
     border: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10000 !important;
 }
 
 /* Open dropdowns on hover for desktop */
@@ -590,10 +615,22 @@ body.home-active [data-bs-theme="dark"] .sidebar {
 }
 
 .chat-message.user {
-    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
-    color: white;
-    margin-left: auto;
-    border-bottom-right-radius: 4px;
+    background: linear-gradient(135deg, #1f6feb 0%, #3498db 100%) !important;
+    color: #ffffff !important;
+    /* Texto blanco innegociable */
+    text-align: right !important;
+    border-right: none !important;
+    /* Quitamos el borde antiguo si lo hubiera */
+    border-radius: 16px 16px 4px 16px !important;
+    /* Burbuja moderna redondeada */
+    box-shadow: 0 2px 8px rgba(31, 111, 235, 0.2) !important;
+}
+
+/* Ajuste específico para cuando el usuario active el Modo Oscuro */
+[data-bs-theme="dark"] .chat-message.user {
+    background: linear-gradient(135deg, #1f6feb 0%, #154360 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
 }
 
 .chat-message.assistant {
@@ -1046,6 +1083,7 @@ body.home-active [data-bs-theme="dark"] .sidebar {
     border-color: #2e7d32;
     color: #ecf0f1;
 }
+
 /* =============================================
    PREMIUM CARDS AND NEW RESPONSIVE UI ELEMENTS
    ============================================= */
@@ -1175,4 +1213,17 @@ body.home-active [data-bs-theme="dark"] .sidebar {
 
 [data-bs-theme="dark"] .sidebar-divider {
     border-top-color: #4e6a85;
+}
+
+/* --- CORRECCIÓN DE CAPAS PARA EL MENÚ DESPLEGABLE --- */
+.tab-content,
+.bslib-page-navbar>.container-fluid {
+    position: relative;
+    z-index: 0 !important;
+}
+
+.navbar {
+    position: relative !important;
+    z-index: 1050 !important;
+    /* Nivel estándar de Bootstrap para barras superiores */
 }

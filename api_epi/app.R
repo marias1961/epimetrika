@@ -45,10 +45,21 @@ source("apps/Pruebas_Diagnosticas_2/app.R")
 # Define UI
 ui <- page_navbar(
   title = "",
-  theme = bs_theme(version = 5, bootswatch = "flatly"),
+  theme = bs_theme(
+    version = 5,
+    base_font = font_google("Inter"),
+    bg = "#f0f4f8",
+    fg = "#1c2433",
+    primary = "#1f6feb",
+    secondary = "#57606a",
+    "border-color" = "rgba(0,0,0,0.08)",
+    "border-radius" = "0.75rem",
+    "card-bg" = "#ffffff"
+  ),
   fillable = FALSE,
   fluid = TRUE,
 
+  # Include Custom CSS, Flag Icons and External Scripts
   # Include Custom CSS, Flag Icons and External Scripts
   header = tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css?v=1.3"),
@@ -59,6 +70,12 @@ ui <- page_navbar(
 
     # Script de UI e Impresión extraído a un archivo JS independiente
     tags$script(src = "print-script.js?v=1.6"),
+
+    # --- FORZAR MODO OSCURO POR DEFECTO ---
+    tags$script(HTML("
+      document.documentElement.setAttribute('data-bs-theme', 'dark');
+    ")),
+    
     tags$style(HTML("
       /* Page Break Visualization in Preview */
       .page-break-marker {
@@ -81,6 +98,25 @@ ui <- page_navbar(
         .page-break-marker { display: none; } /* Hide marker in actual print */
         .printable-section { break-inside: avoid; } /* Avoid breaking inside sections */
       }
+
+      /* --- NUEVO: CSS PARA ABRIR EL MENÚ AL HACER HOVER --- */
+      @media (min-width: 768px) {
+        .navbar .dropdown:hover .dropdown-menu {
+          display: block !important;
+          margin-top: 0;
+        }
+      }
+    ")),
+    
+    # --- NUEVO: SCRIPT PARA FORZAR EL CIERRE DEL MENÚ AL SALIR ---
+    tags$script(HTML("
+      $(document).ready(function() {
+        $('.navbar .dropdown').on('mouseleave', function() {
+          $(this).removeClass('open show');
+          $(this).children('.dropdown-menu').removeClass('show');
+          $(this).children('.dropdown-toggle').attr('aria-expanded', 'false');
+        });
+      });
     "))
   ),
   nav_panel(
@@ -356,7 +392,7 @@ server <- function(input, output, session) {
       stat_coming_soon = "Coming Soon",
       lbl_print = "Print Results",
       print_btn = "Print",
-      print_title = "EpiMétrica - Print Results",
+      print_title = "EpiMétrika - Print Results",
       print_header = "Epidemiological Calculator",
       print_preview = "Print Preview",
       menu_ec = "Clinical Trials",
@@ -472,7 +508,7 @@ server <- function(input, output, session) {
       stat_coming_soon = "即将推出",
       lbl_print = "打印结果",
       print_btn = "打印",
-      print_title = "EpiMétrica - 打印结果",
+      print_title = "EpiMétrika - 打印结果",
       print_header = "流行病学计算器",
       print_preview = "打印预览",
       menu_ec = "临床试验",
@@ -555,7 +591,7 @@ server <- function(input, output, session) {
   }, ignoreInit = FALSE)
 
   # Custom Theme Toggle
-  current_theme <- reactiveVal("light")
+  current_theme <- reactiveVal("dark")
 
   output$theme_toggle_ui <- renderUI({
     theme <- current_theme()
@@ -588,16 +624,16 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("Bienvenido/a a <strong>EpiMétrica</strong>, el portal de apps de Epidemiología y Estadística.")
+          HTML("Bienvenido/a a <strong>EpiMétrika</strong>, el portal de apps de Epidemiología y Estadística.")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
           class = "home-footer",
-          p("EpiMétrica v11. Notas de versión."),
+          p("EpiMétrika v11. Notas de versión."),
           p("Autor: Eduardo Ortega Páez. Pediatra. Comité de Pediatría Basada en la Evidencia. AEP."),
           p("Con el aval del Comité de Pediatría Basada en la Evidencia de la AEP y de la AEPAP."),
           p("Para comunicar cualquier tipo de error o sugerencia le agradeceríamos que escribiera a gatedu@gmail.com"),
-          p("Si utiliza la calculadora para publicar un trabajo científico, rogamos sea citada como: \"EpiMétrica. Portal de apps de Epidemiología y Estadística. E. Ortega Páez. Comité de Pediatría Basada en la Evidencia de la AEP. 2019."),
+          p("Si utiliza la calculadora para publicar un trabajo científico, rogamos sea citada como: \"EpiMétrika. Portal de apps de Epidemiología y Estadística. E. Ortega Páez. Comité de Pediatría Basada en la Evidencia de la AEP. 2019."),
           p("El autor no se responsabiliza del uso que pueda darse a la información derivada de esta aplicación. Se ha esforzado en que la información detallada en esta página sea lo más precisa y actualizada posible, pero dado los cambios constantes de la epidemiología podría ser que no sea completa o contenga algún error, por ello invitamos al usuario que los utilice con sentido crítico y compare los resultados.")
         ),
         div(
@@ -612,7 +648,7 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("Bem-vindo(a) ao <strong>EpiMétrica</strong>, o portal de aplicativos de Epidemiologia e Estatística.")
+          HTML("Bem-vindo(a) ao <strong>EpiMétrika</strong>, o portal de aplicativos de Epidemiologia e Estatística.")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
@@ -621,7 +657,7 @@ server <- function(input, output, session) {
           p("Autor: Eduardo Ortega Páez. Pediatra. Comitê de Pediatria Baseada em Evidências. AEP."),
           p("Com o aval do Comitê de Pediatria Baseada em Evidências da AEP e da AEPAP."),
           p("Para comunicar qualquer tipo de erro ou sugestão, por favor escreva para gatedu@gmail.com"),
-          p("Se utilizar a calculadora para publicar um trabajo científico, solicitamos que seja citada como: \"EpiMétrica. Portal de aplicativos de Epidemiologia e Estatística. E. Ortega Páez. Comitê de Pediatría Baseada em Evidências da AEP. 2019."),
+          p("Se utilizar a calculadora para publicar um trabajo científico, solicitamos que seja citada como: \"EpiMétrika. Portal de aplicativos de Epidemiologia e Estatística. E. Ortega Páez. Comitê de Pediatría Baseada em Evidências da AEP. 2019."),
           p("O autor não se responsabiliza pelo uso que possa ser dado às informações derivadas desta aplicação. Esforçou-se para que a informação detalhada nesta página seja o mais precisa e atualizada possível, mas dadas as constantes mudanças na epidemiologia, pode ser que não esteja completa ou contenha algum erro, por isso convidamos o usuário a utilizá-la com sentido crítico e comparar os resultados.")
         ),
         div(
@@ -641,7 +677,7 @@ server <- function(input, output, session) {
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
           class = "home-footer",
-          p("EpiMétrica v11. 版本说明。"),
+          p("EpiMétrika v11. 版本说明。"),
           p("作者：Eduardo Ortega Páez。儿科医生。AEP 循证儿科学委员会。"),
           p("得到 AEP 和 AEPAP 循证儿科学委员会的认可。"),
           p("如需报告任何错误或建议，请发送至 gatedu@gmail.com"),
@@ -660,16 +696,16 @@ server <- function(input, output, session) {
         class = "home-container",
         div(
           class = "home-welcome-text",
-          HTML("Welcome to <strong>EpiMétrica</strong>, the portal of apps for Epidemiology and Statistics.")
+          HTML("Welcome to <strong>EpiMétrika</strong>, the portal of apps for Epidemiology and Statistics.")
         ),
         div(class = "home-logo-text", "EVIDENCIAS EN PEDIATRÍA"),
         div(
           class = "home-footer",
-          p("EpiMétrica v11. Release Notes."),
+          p("EpiMétrika v11. Release Notes."),
           p("Author: Eduardo Ortega Páez. Pediatrician. Evidence-Based Pediatrics Committee. AEP."),
           p("Endorsed by the Evidence-Based Pediatrics Committee of the AEP and AEPAP."),
           p("To report any errors or suggestions, please write to gatedu@gmail.com"),
-          p("If you use this calculator to publish a scientific paper, please cite it as: \"EpiMétrica. Portal of apps for Epidemiology and Statistics. E. Ortega Páez. Evidence-Based Pediatrics Committee of the AEP. 2019."),
+          p("If you use this calculator to publish a scientific paper, please cite it as: \"EpiMétrika. Portal of apps for Epidemiology and Statistics. E. Ortega Páez. Evidence-Based Pediatrics Committee of the AEP. 2019."),
           p("The author is not responsible for the use that may be made of the information derived from this application. Efforts have been made to ensure that the information detailed on this page is as accurate and up-to-date as possible, but given the constant changes in epidemiology, it may not be complete or may contain errors, so we invite the user to use it with critical sense and compare the results.")
         ),
         div(

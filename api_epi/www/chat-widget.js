@@ -1,5 +1,5 @@
 /**
- * EpiMétrica RAG Chat Widget - METODIX
+ * EpiMétrika RAG Chat Widget - METODIX
  * Floating draggable/resizable chat window for n8n-based AI assistant
  */
 

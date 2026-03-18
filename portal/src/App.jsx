@@ -5,7 +5,7 @@ import './App.css';
 const i18n = {
   es: {
     tagline: 'Portal de apps de Epidemiología y Estadística',
-    subtitle: 'Selecciona un módulo para comenzar. Cada calculadora se ejecuta de forma independiente.',
+    subtitle: 'Selecciona un módulo para comenzar',
     card_epi_title: 'Calculadoras Epidemiológicas',
     card_epi_desc: 'Estudios de cohortes, casos y controles, OR/RR, ecológicos, transversales y más.',
     card_stat_title: 'Calculadoras Estadísticas',
@@ -16,14 +16,14 @@ const i18n = {
     back: '← Volver',
     theme_dark: 'Oscuro',
     theme_light: 'Claro',
-    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: 'Cargando módulo…',
     assistant_hint: 'Asistente Metodix disponible dentro de cada módulo.',
     flag: '🇪🇸',
   },
   en: {
     tagline: 'Epidemiology and Statistics Apps Portal',
-    subtitle: 'Select a module to get started. Each calculator runs independently.',
+    subtitle: 'Select a module to get started',
     card_epi_title: 'Epidemiological Calculators',
     card_epi_desc: 'Cohort studies, case-control, OR/RR, ecological, cross-sectional and more.',
     card_stat_title: 'Statistical Calculators',
@@ -34,14 +34,14 @@ const i18n = {
     back: '← Back',
     theme_dark: 'Dark',
     theme_light: 'Light',
-    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: 'Loading module…',
     assistant_hint: 'Metodix AI assistant available inside each module.',
     flag: '🇬🇧',
   },
   pt: {
     tagline: 'Portal de aplicativos de Epidemiologia e Estatística',
-    subtitle: 'Selecione um módulo para começar. Cada calculadora funciona de forma independente.',
+    subtitle: 'Selecione um módulo para começar',
     card_epi_title: 'Calculadoras Epidemiológicas',
     card_epi_desc: 'Estudos de coorte, caso-controle, OR/RR, ecológicos, transversais e mais.',
     card_stat_title: 'Calculadoras Estatísticas',
@@ -52,14 +52,14 @@ const i18n = {
     back: '← Voltar',
     theme_dark: 'Escuro',
     theme_light: 'Claro',
-    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: 'Carregando módulo…',
     assistant_hint: 'Assistente Metodix IA disponível dentro de cada módulo.',
     flag: '🇧🇷',
   },
   zh: {
     tagline: '流行病学与统计应用门户',
-    subtitle: '选择一个模块开始使用。每个计算器独立运行。',
+    subtitle: '选择一个模块开始使用',
     card_epi_title: '流行病学计算器',
     card_epi_desc: '队列研究、病例对照、OR/RR、生态学、横断面研究等。',
     card_stat_title: '统计学计算器',
@@ -70,7 +70,7 @@ const i18n = {
     back: '← 返回',
     theme_dark: '深色',
     theme_light: '浅色',
-    footer: 'EpiMétrica V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
     loading: '正在加载模块…',
     assistant_hint: 'Metodix AI 智能助手在每个模块中均可使用。',
     flag: '🇨🇳',
@@ -158,7 +158,7 @@ export default function App() {
       <nav className="navbar">
         <div className="navbar-brand" onClick={goHome}>
           <span className="brand-icon">🩺</span>
-          <span className="brand-text">EpiMétrica</span>
+          <span className="brand-text">EpiMétrika</span>
           <span className="brand-version">V2</span>
         </div>
 
@@ -181,7 +181,7 @@ export default function App() {
           >
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
-          
+
           <button
             className="print-btn"
             title={t.flag === '🇪🇸' ? 'Imprimir' : t.flag === '🇬🇧' ? 'Print' : t.flag === '🇧🇷' ? 'Imprimir' : '打印'}
@@ -214,7 +214,7 @@ export default function App() {
           /* ── HOME / HUB ─────────────────────────────── */
           <div className="hub">
             <div className="hero">
-              <h1 className="hero-title">EpiMétrica</h1>
+              <h1 className="hero-title">EpiMétrika</h1>
               <p className="hero-tagline">{t.tagline}</p>
               <p className="hero-subtitle">{t.subtitle}</p>
             </div>

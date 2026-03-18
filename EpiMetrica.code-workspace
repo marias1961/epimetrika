@@ -5,6 +5,6 @@
 		}
 	],
 	"settings": {
-		"window.title": "EpiMétrica - ${activeEditorShort}${separator}${rootName}"
+		"window.title": "EpiMétrika - ${activeEditorShort}${separator}${rootName}"
 	}
 }
