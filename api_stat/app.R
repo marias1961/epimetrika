@@ -27,9 +27,6 @@ ui <- page_navbar(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css?v=1.3"),
     tags$link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"),
 
-    # Chat Widget (RAG Assistant - n8n integration)
-    tags$script(src = "chat-widget.js?v=1.3"),
-
     # Script de UI e Impresión extraído a un archivo JS independiente
     tags$script(src = "print-script.js"),
     tags$style(HTML("

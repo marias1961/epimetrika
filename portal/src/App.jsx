@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
+import AssistantWidget from './components/AssistantWidget';
 
 // ─── Traducciones del portal ────────────────────────────────────────────────
 const i18n = {
@@ -16,9 +17,9 @@ const i18n = {
     back: '← Volver',
     theme_dark: 'Oscuro',
     theme_light: 'Claro',
-    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika · 2026',
     loading: 'Cargando módulo…',
-    assistant_hint: 'Asistente Metodix disponible dentro de cada módulo.',
+    assistant_hint: 'Puedes consultar tus dudas a Metodix',
     flag: '🇪🇸',
   },
   en: {
@@ -34,9 +35,9 @@ const i18n = {
     back: '← Back',
     theme_dark: 'Dark',
     theme_light: 'Light',
-    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika · 2026',
     loading: 'Loading module…',
-    assistant_hint: 'Metodix AI assistant available inside each module.',
+    assistant_hint: 'You can consult your doubts with Metodix',
     flag: '🇬🇧',
   },
   pt: {
@@ -47,14 +48,14 @@ const i18n = {
     card_stat_title: 'Calculadoras Estatísticas',
     card_stat_desc: 'Nomograma de Fagan, testes diagnósticos, concordância Kappa, ICC e mais.',
     card_sample_title: 'Tamanho da Amostra',
-    card_sample_desc: 'Cálculos de poder e tamanho da amostra para diferentes desenhos de estudo.',
+    card_sample_desc: 'Cálculos de poder e tamanho da amostra para diferentes desenhos de estudio.',
     btn_open: 'Abrir módulo',
     back: '← Voltar',
     theme_dark: 'Escuro',
     theme_light: 'Claro',
-    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika · 2026',
     loading: 'Carregando módulo…',
-    assistant_hint: 'Assistente Metodix IA disponível dentro de cada módulo.',
+    assistant_hint: 'Você pode consultar suas dúvidas com o Metodix',
     flag: '🇧🇷',
   },
   zh: {
@@ -70,9 +71,9 @@ const i18n = {
     back: '← 返回',
     theme_dark: '深色',
     theme_light: '浅色',
-    footer: 'EpiMétrika V2 · Evidencias en Pediatría · Eduardo Ortega Páez · AEP',
+    footer: 'EpiMétrika · 2026',
     loading: '正在加载模块…',
-    assistant_hint: 'Metodix AI 智能助手在每个模块中均可使用。',
+    assistant_hint: '您可以向 Metodix 咨询您的疑问',
     flag: '🇨🇳',
   },
 };
@@ -118,9 +119,11 @@ export default function App() {
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const t = i18n[lang];
 
+  // Referencia para controlar el asistente Metodix
+  const assistantRef = useRef(null);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    // Send theme update to iframe if it exists
     const iframe = document.querySelector('.module-iframe');
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.postMessage({ type: 'theme', value: theme }, '*');
@@ -128,22 +131,11 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    // Send lang update to iframe if it exists
     const iframe = document.querySelector('.module-iframe');
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.postMessage({ type: 'lang', value: lang }, '*');
     }
   }, [lang]);
-
-  // When iframe loads, send current state to initialize it
-  const handleIframeLoad = () => {
-    setIframeLoaded(true);
-    const iframe = document.querySelector('.module-iframe');
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({ type: 'theme', value: theme }, '*');
-      iframe.contentWindow.postMessage({ type: 'lang', value: lang }, '*');
-    }
-  };
 
   const openModule = (mod) => {
     setIframeLoaded(false);
@@ -152,14 +144,21 @@ export default function App() {
 
   const goHome = () => setActiveModule(null);
 
+  // Función mejorada para abrir el asistente
+  const openAssistantExternally = (e) => {
+    if (e) e.preventDefault();
+    if (assistantRef.current && assistantRef.current.open) {
+      assistantRef.current.open();
+    }
+  };
+
   return (
     <div className="portal-root">
       {/* ── NAVBAR ─────────────────────────────────────────────────── */}
       <nav className="navbar">
-        <div className="navbar-brand" onClick={goHome}>
+        <div className="navbar-brand" onClick={goHome} style={{ cursor: 'pointer' }}>
           <span className="brand-icon">🩺</span>
           <span className="brand-text">EpiMétrika</span>
-          <span className="brand-version">V2</span>
         </div>
 
         <div className="navbar-controls">
@@ -211,7 +210,6 @@ export default function App() {
       {/* ── MAIN ────────────────────────────────────────────────────── */}
       <main className="main-content">
         {!activeModule ? (
-          /* ── HOME / HUB ─────────────────────────────── */
           <div className="hub">
             <div className="hero">
               <h1 className="hero-title">EpiMétrika</h1>
@@ -234,10 +232,22 @@ export default function App() {
               ))}
             </div>
 
-            <p className="assistant-hint">🤖 {t.assistant_hint}</p>
+            {/* BARRA DEL ASISTENTE CLICABLE */}
+            <div
+              className="assistant-hint-bar"
+              onClick={openAssistantExternally}
+              style={{
+                cursor: 'pointer',
+                marginTop: '40px',
+                userSelect: 'none'
+              }}
+            >
+              <p className="assistant-hint" style={{ pointerEvents: 'none' }}>
+                🤖 {t.assistant_hint}
+              </p>
+            </div>
           </div>
         ) : (
-          /* ── IFRAME MODULE ──────────────────────────── */
           <div className="iframe-wrap">
             <div className="iframe-topbar">
               <button className="back-btn" onClick={goHome}>
@@ -273,6 +283,10 @@ export default function App() {
           <p>{t.footer}</p>
         </footer>
       )}
+
+      {/* ASISTENTE CON REFERENCIA */}
+      <AssistantWidget lang={lang} ref={assistantRef} />
+
     </div>
   );
 }
