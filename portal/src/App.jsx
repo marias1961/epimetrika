@@ -21,6 +21,7 @@ const i18n = {
     loading: 'Cargando módulo…',
     assistant_hint: 'Puedes consultar tus dudas a Metodix',
     flag: '🇪🇸',
+    print: 'Imprimir',
   },
   en: {
     tagline: 'Epidemiology and Statistics Apps Portal',
@@ -39,6 +40,7 @@ const i18n = {
     loading: 'Loading module…',
     assistant_hint: 'You can consult your doubts with Metodix',
     flag: '🇬🇧',
+    print: 'Print',
   },
   pt: {
     tagline: 'Portal de aplicativos de Epidemiologia e Estatística',
@@ -57,6 +59,7 @@ const i18n = {
     loading: 'Carregando módulo…',
     assistant_hint: 'Você pode consultar suas dúvidas com o Metodix',
     flag: '🇧🇷',
+    print: 'Imprimir',
   },
   zh: {
     tagline: '流行病学与统计应用门户',
@@ -75,6 +78,7 @@ const i18n = {
     loading: '正在加载模块…',
     assistant_hint: '您可以向 Metodix 咨询您的疑问',
     flag: '🇨🇳',
+    print: '打印',
   },
 };
 
@@ -117,37 +121,67 @@ export default function App() {
   const [theme, setTheme] = useState('dark');
   const [activeModule, setActiveModule] = useState(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+
   const t = i18n[lang];
-
-  // Referencia para controlar el asistente Metodix
   const assistantRef = useRef(null);
+  const iframeRef = useRef(null);
 
+  // ─── COMUNICACIÓN CON SHINY ──────────────────────────────────────────────────
+  const sendToShiny = (action, payload) => {
+    // Intentamos usar la referencia primero (más seguro y directo)
+    let iframeWindow = iframeRef.current?.contentWindow;
+
+    // Fallback: si la ref falla por alguna razón del ciclo de React, buscamos en el DOM
+    if (!iframeWindow) {
+      const domIframe = document.querySelector('.module-iframe');
+      if (domIframe) iframeWindow = domIframe.contentWindow;
+    }
+
+    if (iframeWindow) {
+      // Usamos el formato estandarizado que hemos definido para el listener global de R
+      iframeWindow.postMessage({ action, payload }, '*');
+    }
+  };
+
+  // ─── EFECTOS GLOBALES ────────────────────────────────────────────────────────
+  // Cambio de Tema
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    const iframe = document.querySelector('.module-iframe');
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({ type: 'theme', value: theme }, '*');
-    }
+    document.documentElement.setAttribute('data-bs-theme', theme); // Para forzar Bootstrap si es necesario
+    sendToShiny('CHANGE_THEME', theme);
   }, [theme]);
 
+  // Cambio de Idioma
   useEffect(() => {
-    const iframe = document.querySelector('.module-iframe');
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({ type: 'lang', value: lang }, '*');
-    }
+    sendToShiny('CHANGE_LANG', lang);
   }, [lang]);
 
+  // Sincronización al cargar un nuevo iframe
+  const handleIframeLoad = () => {
+    setIframeLoaded(true);
+    // Le inyectamos el estado actual para que no parpadee al idioma/tema por defecto
+    sendToShiny('CHANGE_LANG', lang);
+    sendToShiny('CHANGE_THEME', theme);
+  };
+
+  // ─── NAVEGACIÓN Y ACCIONES ───────────────────────────────────────────────────
   const openModule = (mod) => {
     setIframeLoaded(false);
     setActiveModule(mod);
   };
 
-  const goHome = () => setActiveModule(null);
+  const goHome = () => {
+    setActiveModule(null);
+    setIframeLoaded(false);
+  };
 
-  // Función mejorada para abrir el asistente
+  const handlePrint = () => {
+    sendToShiny('PRINT_REQUEST', null);
+  };
+
   const openAssistantExternally = (e) => {
     if (e) e.preventDefault();
-    if (assistantRef.current && assistantRef.current.open) {
+    if (assistantRef.current?.open) {
       assistantRef.current.open();
     }
   };
@@ -181,15 +215,11 @@ export default function App() {
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
 
+          {/* Botón de impresión refactorizado */}
           <button
             className="print-btn"
-            title={t.flag === '🇪🇸' ? 'Imprimir' : t.flag === '🇬🇧' ? 'Print' : t.flag === '🇧🇷' ? 'Imprimir' : '打印'}
-            onClick={() => {
-              const iframe = document.querySelector('.module-iframe');
-              if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage({ type: 'print' }, '*');
-              }
-            }}
+            title={t.print}
+            onClick={handlePrint}
             disabled={!activeModule}
             style={{
               background: 'transparent',
@@ -232,7 +262,6 @@ export default function App() {
               ))}
             </div>
 
-            {/* BARRA DEL ASISTENTE CLICABLE */}
             <div
               className="assistant-hint-bar"
               onClick={openAssistantExternally}
@@ -266,11 +295,12 @@ export default function App() {
             )}
 
             <iframe
+              ref={iframeRef}
               key={activeModule.path}
               src={activeModule.path}
               title={t[activeModule.titleKey]}
               className={`module-iframe ${iframeLoaded ? 'visible' : ''}`}
-              onLoad={() => setIframeLoaded(true)}
+              onLoad={handleIframeLoad}
               allow="fullscreen"
             />
           </div>

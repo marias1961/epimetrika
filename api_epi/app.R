@@ -60,12 +60,9 @@ ui <- page_navbar(
   fluid = TRUE,
 
   # Include Custom CSS, Flag Icons and External Scripts
-  # Include Custom CSS, Flag Icons and External Scripts
   header = tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css?v=1.3"),
     tags$link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"),
-
-    # Script de UI e Impresión extraído a un archivo JS independiente
     tags$script(src = "print-script.js?v=1.6"),
 
     # --- FORZAR MODO OSCURO POR DEFECTO ---
@@ -73,48 +70,45 @@ ui <- page_navbar(
       document.documentElement.setAttribute('data-bs-theme', 'dark');
     ")),
     
-    tags$style(HTML("
-      /* Page Break Visualization in Preview */
-      .page-break-marker {
-        border-top: 2px dashed #e74c3c;
-        margin: 20px 0;
-        position: relative;
-        text-align: center;
-        color: #e74c3c;
-        font-size: 0.8rem;
-        pointer-events: none; /* Let clicks pass through */
-      }
-      .page-break-marker::after {
-        content: 'Salto de Página Estimado / Page Break';
-        background: #fffbe6;
-        padding: 0 10px;
-        position: relative;
-        top: -10px;
-      }
-      @media print {
-        .page-break-marker { display: none; } /* Hide marker in actual print */
-        .printable-section { break-inside: avoid; } /* Avoid breaking inside sections */
-      }
-
-      /* --- NUEVO: CSS PARA ABRIR EL MENÚ AL HACER HOVER --- */
-      @media (min-width: 768px) {
-        .navbar .dropdown:hover .dropdown-menu {
-          display: block !important;
-          margin-top: 0;
-        }
-      }
-    ")),
-    
-    # --- NUEVO: SCRIPT PARA FORZAR EL CIERRE DEL MENÚ AL SALIR ---
+    # --- SCRIPT RECEPTOR GLOBAL (COMUNICACIÓN CON REACT) ---
     tags$script(HTML("
       $(document).ready(function() {
+        window.addEventListener('message', function(event) {
+          // Ignorar mensajes que no tengan nuestra estructura estandarizada
+          if (!event.data || !event.data.action) return;
+
+          // 1. Cambio de Idioma
+          if (event.data.action === 'CHANGE_LANG') {
+            Shiny.setInputValue('global_lang', event.data.payload);
+          }
+          
+          // 2. Cambio de Tema
+          if (event.data.action === 'CHANGE_THEME') {
+            document.documentElement.setAttribute('data-bs-theme', event.data.payload);
+            Shiny.setInputValue('global_theme', event.data.payload);
+          }
+
+          // 3. Petición de Impresión
+          if (event.data.action === 'PRINT_REQUEST') {
+            // Llama al sistema de impresión (si tienes una función específica en print-script.js úsala aquí, si no window.print)
+            if (typeof window.prepareAndPrint === 'function') {
+               window.prepareAndPrint(); 
+            } else {
+               window.print();
+            }
+          }
+        });
+
+        // Comportamiento de los menús desplegables
         $('.navbar .dropdown').on('mouseleave', function() {
           $(this).removeClass('open show');
           $(this).children('.dropdown-menu').removeClass('show');
           $(this).children('.dropdown-toggle').attr('aria-expanded', 'false');
         });
       });
-    "))
+    ")),
+    
+    # ... (Aquí continúan tus tags$style para .page-break-marker etc) ...
   ),
   nav_panel(
     title = span(id = "home_tab_label", "Inicio"),
@@ -270,8 +264,9 @@ server <- function(input, output, session) {
     message(paste("DEBUG: input$lang changed to:", input$lang))
   })
 
-  lang <- reactive({
-    l <- if (is.null(input$lang)) "es" else input$lang
+ lang <- reactive({
+    # Escucha la variable global inyectada desde React. Si es nula (al arrancar), asume 'es'.
+    l <- if (is.null(input$global_lang)) "es" else input$global_lang
     message(paste("DEBUG: lang reactive evaluated, value =", l))
     l
   })
@@ -587,34 +582,7 @@ server <- function(input, output, session) {
     session$sendCustomMessage("updateChatLanguage", lang())
   }, ignoreInit = FALSE)
 
-  # Custom Theme Toggle
-  current_theme <- reactiveVal("dark")
-
-  output$theme_toggle_ui <- renderUI({
-    theme <- current_theme()
-    t <- nav_tr[[lang()]]
-
-    if (theme == "light") {
-      btn_label <- HTML("<span style='font-size: 1.8rem;'>☀️</span> <span style='font-size: 1.5rem; margin: 0 8px; color: #2c3e50;'>→</span> <span style='font-size: 1.8rem;'>🌙</span>")
-      btn_title <- t$tip_to_dark
-    } else {
-      btn_label <- HTML("<span style='font-size: 1.8rem;'>🌙</span> <span style='font-size: 1.5rem; margin: 0 8px; color: #ecf0f1;'>→</span> <span style='font-size: 1.8rem;'>☀️</span>")
-      btn_title <- t$tip_to_light
-    }
-
-    actionButton("toggle_theme",
-      label = btn_label, title = btn_title,
-      class = "btn", style = "padding: 5px 10px; background-color: transparent; border: none; cursor: pointer; display: flex; align-items: center;"
-    )
-  })
-
-  observeEvent(input$toggle_theme, {
-    new_theme <- if (current_theme() == "light") "dark" else "light"
-    current_theme(new_theme)
-    # Send JS to update the document theme attribute
-    session$sendCustomMessage("setTheme", new_theme)
-  })
-
+ 
   output$home_content <- renderUI({
     if (lang() == "es") {
       div(
