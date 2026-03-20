@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import Draggable from 'react-draggable';
 import './AssistantWidget.css';
 
@@ -33,7 +33,8 @@ const i18n_assistant = {
 // URL DE TU WEBHOOK DE N8N
 const N8N_WEBHOOK_URL = "https://corsproxy.io/?https://n8n.cienciasinseso.com/webhook/chat";
 
-const AssistantWidget = ({ lang = 'es' }) => {
+// VERSIÓN SEGURA: Usamos "function AssistantWidget" dentro del forwardRef
+const AssistantWidget = forwardRef(function AssistantWidget({ lang = 'es' }, ref) {
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState([]);
@@ -41,18 +42,25 @@ const AssistantWidget = ({ lang = 'es' }) => {
 
     const nodeRef = useRef(null);
     const messagesEndRef = useRef(null);
-    const inputRef = useRef(null); // Referencia para controlar el foco del input
+    const inputRef = useRef(null);
 
     const t = i18n_assistant[lang] || i18n_assistant.es;
 
-    // Efecto para auto-scroll hacia el final de los mensajes
+    // Conectamos la orden externa de "abrir" con el estado interno
+    useImperativeHandle(ref, () => ({
+        open: () => {
+            setIsOpen(true);
+        }
+    }));
+
+    // Auto-scroll al final cuando hay mensajes nuevos
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages, isOpen, isLoading]);
 
-    // EFECTO NUEVO: Devolver el foco al input cuando termina de cargar
+    // Foco automático en el input al terminar de cargar
     useEffect(() => {
         if (!isLoading && isOpen && inputRef.current) {
             inputRef.current.focus();
@@ -66,40 +74,29 @@ const AssistantWidget = ({ lang = 'es' }) => {
 
         const userText = inputValue;
         setInputValue('');
-
-        // 1. Mostrar el mensaje del usuario en la pantalla
         setMessages((prev) => [...prev, { role: 'user', text: userText }]);
         setIsLoading(true);
 
         try {
-            // 2. Hacer la petición al Webhook de n8n
             const response = await fetch(N8N_WEBHOOK_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    question: userText
-                })
+                body: JSON.stringify({ question: userText })
             });
 
             if (!response.ok) throw new Error("Error en la red");
 
-            // 3. Leer la respuesta de n8n
             const data = await response.json();
-
-            // Ajusta los campos según la respuesta de tu flujo
             const botText = data.output || data.text || data.response || "No se recibió respuesta válida.";
 
-            // 4. Mostrar la respuesta
             setMessages((prev) => [...prev, { role: 'bot', text: botText }]);
-
         } catch (error) {
             console.error("Error conectando con n8n:", error);
             setMessages((prev) => [...prev, { role: 'bot', text: "⚠️ Hubo un error de conexión. Inténtalo de nuevo." }]);
         } finally {
             setIsLoading(false);
-            // El foco volverá automáticamente gracias al useEffect definido arriba
         }
     };
 
@@ -147,7 +144,7 @@ const AssistantWidget = ({ lang = 'es' }) => {
 
                         <div className="assistant-footer">
                             <input
-                                ref={inputRef} /* Asociamos la referencia aquí */
+                                ref={inputRef}
                                 type="text"
                                 placeholder={t.placeholder}
                                 className="assistant-input"
@@ -170,6 +167,6 @@ const AssistantWidget = ({ lang = 'es' }) => {
             )}
         </>
     );
-};
+});
 
 export default AssistantWidget;
