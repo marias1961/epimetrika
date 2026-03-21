@@ -30,8 +30,8 @@ const i18n_assistant = {
     }
 };
 
-// URL DE TU WEBHOOK DE N8N
-const N8N_WEBHOOK_URL = "https://corsproxy.io/?https://n8n.cienciasinseso.com/webhook/chat-metodix";
+// URL DE TU WEBHOOK DE N8N. Usamos siempre el proxy relativo de Nginx
+const N8N_WEBHOOK_URL = "/api/metodix";
 
 // VERSIÓN SEGURA: Usamos "function AssistantWidget" dentro del forwardRef
 const AssistantWidget = forwardRef(function AssistantWidget({ lang = 'es' }, ref) {
