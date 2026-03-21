@@ -31,7 +31,7 @@ const i18n_assistant = {
 };
 
 // URL DE TU WEBHOOK DE N8N
-const N8N_WEBHOOK_URL = "https://corsproxy.io/?https://n8n.cienciasinseso.com/webhook/chat";
+const N8N_WEBHOOK_URL = "https://corsproxy.io/?https://n8n.cienciasinseso.com/webhook/chat-metodix";
 
 // VERSIÓN SEGURA: Usamos "function AssistantWidget" dentro del forwardRef
 const AssistantWidget = forwardRef(function AssistantWidget({ lang = 'es' }, ref) {
@@ -116,7 +116,7 @@ const AssistantWidget = forwardRef(function AssistantWidget({ lang = 'es' }, ref
             )}
 
             {isOpen && (
-                <Draggable nodeRef={nodeRef} handle=".assistant-header" bounds="body">
+                <Draggable nodeRef={nodeRef} handle=".assistant-header">
                     <div ref={nodeRef} className="assistant-window">
 
                         <div className="assistant-header">

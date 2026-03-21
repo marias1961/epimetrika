@@ -47,11 +47,14 @@
 /* ── VENTANA PRINCIPAL ── */
 .assistant-window {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    top: calc(100vh - 530px);
+    left: calc(100vw - 380px);
     z-index: 9999;
     width: 350px;
     height: 500px;
+    min-width: 250px;
+    min-height: 350px;
+    resize: both;
     background-color: #ffffff;
     color: #1c2433;
     border-radius: 12px;

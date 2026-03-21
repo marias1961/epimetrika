@@ -276,7 +276,7 @@ server <- function(input, output, session) {
     req_data <- input$metodix_query
 
     # Endpoint de n8n (Producción)
-    url <- "https://n8n.cienciasinseso.com/webhook/chat"
+    url <- "https://n8n.cienciasinseso.com/webhook/chat-metodix"
 
     tryCatch(
       {
