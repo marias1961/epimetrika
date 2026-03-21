@@ -303,6 +303,18 @@ body {
 }
 
 /* ─── Assistant Hint ─────────────────────────────────────────────────────── */
+.assistant-hint-bar {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.assistant-hint-sector {
+  display: flex;
+  flex-direction: column;
+}
+
 .assistant-hint {
   text-align: center;
   font-size: 0.85rem;
@@ -311,6 +323,106 @@ body {
   border: 1px dashed var(--border);
   border-radius: 10px;
   background: var(--bg-card);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.center-sector .assistant-hint:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-h);
+}
+
+@media (max-width: 768px) {
+  .assistant-hint-bar {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ─── Legal Note Modal ───────────────────────────────────────────────────── */
+.legal-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.legal-modal-content {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: var(--shadow);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.legal-modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.legal-modal-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Welcome Modal Specifics ────────────────────────────────────────────── */
+.welcome-modal-content {
+  text-align: center;
+}
+
+.welcome-hero-text {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+.welcome-hero-text strong {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.welcome-logo-text {
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.welcome-footer-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* ─── Iframe View ────────────────────────────────────────────────────────── */

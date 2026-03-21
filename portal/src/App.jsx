@@ -20,6 +20,18 @@ const i18n = {
     footer: 'EpiMétrika · 2026',
     loading: 'Cargando módulo…',
     assistant_hint: 'Puedes consultar tus dudas a Metodix',
+    legal_note: 'Nota legal',
+    legal_text: 'El autor no se responsabiliza del uso que pueda darse a la información derivada de esta aplicación. Se ha esforzado en que la información detallada en esta página sea lo más precisa y actualizada posible, pero dado los cambios constantes de la epidemiología podría ser que no sea completa o contenga algún error, por ello invitamos al usuario que los utilice con sentido crítico y compare los resultados.',
+    welcome: 'Bienvenida',
+    welcome_title: 'Mensaje de bienvenida',
+    welcome_text_1: 'Bienvenido/a a',
+    welcome_text_2: ', el portal de apps de Epidemiología y Estadística.',
+    welcome_logo_text: 'EVIDENCIAS EN PEDIATRÍA',
+    welcome_v: 'EpiMétrika v11. Notas de versión.',
+    welcome_author: 'Autor: Eduardo Ortega Páez. Pediatra. Comité de Pediatría Basada en la Evidencia. AEP.',
+    welcome_endorsement: 'Con el aval del Comité de Pediatría Basada en la Evidencia de la AEP y de la AEPAP.',
+    welcome_contact: 'Para comunicar cualquier tipo de error o sugerencia le agradeceríamos que escribiera a gatedu@gmail.com',
+    welcome_citation: 'Si utiliza la calculadora para publicar un trabajo científico, rogamos sea citada como: "EpiMétrika. Portal de apps de Epidemiología y Estadística. E. Ortega Páez. Comité de Pediatría Basada en la Evidencia de la AEP. 2019."',
     flag: '🇪🇸',
     print: 'Imprimir',
   },
@@ -39,6 +51,18 @@ const i18n = {
     footer: 'EpiMétrika · 2026',
     loading: 'Loading module…',
     assistant_hint: 'You can consult your doubts with Metodix',
+    legal_note: 'Legal note',
+    legal_text: 'The author is not responsible for the use that may be given to the information derived from this application. Efforts have been made to ensure that the detailed information on this page is as accurate and up-to-date as possible, but given the constant changes in epidemiology, it may not be complete or may contain errors. Therefore, we invite the user to use it with a critical sense and compare the results.',
+    welcome: 'Welcome',
+    welcome_title: 'Welcome message',
+    welcome_text_1: 'Welcome to',
+    welcome_text_2: ', the portal of apps for Epidemiology and Statistics.',
+    welcome_logo_text: 'EVIDENCIAS EN PEDIATRÍA',
+    welcome_v: 'EpiMétrika v11. Release Notes.',
+    welcome_author: 'Author: Eduardo Ortega Páez. Pediatrician. Evidence-Based Pediatrics Committee. AEP.',
+    welcome_endorsement: 'Endorsed by the Evidence-Based Pediatrics Committee of the AEP and AEPAP.',
+    welcome_contact: 'To report any errors or suggestions, please write to gatedu@gmail.com',
+    welcome_citation: 'If you use this calculator to publish a scientific paper, please cite it as: "EpiMétrika. Portal of apps for Epidemiology and Statistics. E. Ortega Páez. Evidence-Based Pediatrics Committee of the AEP. 2019."',
     flag: '🇬🇧',
     print: 'Print',
   },
@@ -58,6 +82,18 @@ const i18n = {
     footer: 'EpiMétrika · 2026',
     loading: 'Carregando módulo…',
     assistant_hint: 'Você pode consultar suas dúvidas com o Metodix',
+    legal_note: 'Nota legal',
+    legal_text: 'O autor não se responsabiliza pelo uso que possa ser dado à informação derivada desta aplicação. Esforço foi feito para que a informação detalhada nesta página seja a mais precisa e atualizada possível, mas dadas as constantes mudanças da epidemiologia, pode ser que não esteja completa ou contenha algum erro. Por isso, convidamos o usuário a utilizá-la com senso crítico e a comparar os resultados.',
+    welcome: 'Boas-vindas',
+    welcome_title: 'Mensagem de boas-vindas',
+    welcome_text_1: 'Bem-vindo(a) ao',
+    welcome_text_2: ', o portal de aplicativos de Epidemiologia e Estatística.',
+    welcome_logo_text: 'EVIDENCIAS EN PEDIATRÍA',
+    welcome_v: 'EpiMétrika v11. Notas de versão.',
+    welcome_author: 'Autor: Eduardo Ortega Páez. Pediatra. Comitê de Pediatria Baseada em Evidências. AEP.',
+    welcome_endorsement: 'Com o aval do Comitê de Pediatria Baseada em Evidências da AEP e da AEPAP.',
+    welcome_contact: 'Para comunicar qualquer tipo de erro ou sugestão, por favor escreva para gatedu@gmail.com',
+    welcome_citation: 'Se utilizar a calculadora para publicar um trabalho científico, solicitamos que seja citada como: "EpiMétrika. Portal de aplicativos de Epidemiologia e Estatística. E. Ortega Páez. Comitê de Pediatria Baseada em Evidências da AEP. 2019."',
     flag: '🇧🇷',
     print: 'Imprimir',
   },
@@ -77,6 +113,18 @@ const i18n = {
     footer: 'EpiMétrika · 2026',
     loading: '正在加载模块…',
     assistant_hint: '您可以向 Metodix 咨询您的疑问',
+    legal_note: '法律声明',
+    legal_text: '作者对可能因使用本应用程序衍生的信息而造成的后果不承担任何责任。我们已努力确保本页面上的详细信息尽可能准确和最新，但鉴于流行病学的不断变化，信息可能不完整或包含误差。因此，我们建议用户以批判的态度使用并比较结果。',
+    welcome: '欢迎',
+    welcome_title: '欢迎信息',
+    welcome_text_1: '欢迎使用',
+    welcome_text_2: '，流行病学与统计应用门户。',
+    welcome_logo_text: 'EVIDENCIAS EN PEDIATRÍA',
+    welcome_v: 'EpiMétrika v11. 版本说明。',
+    welcome_author: '作者：Eduardo Ortega Páez。儿科医生。AEP 循证儿科学委员会。',
+    welcome_endorsement: '得到 AEP 和 AEPAP 循证儿科学委员会的认可。',
+    welcome_contact: '如需报告任何错误或建议，请发送至 gatedu@gmail.com',
+    welcome_citation: '如果您在发表科研论文时使用此计算器，请引用为："EpiMétrika. Portal of apps for Epidemiology and Statistics. E. Ortega Páez. Evidence-Based Pediatrics Committee of the AEP. 2019."',
     flag: '🇨🇳',
     print: '打印',
   },
@@ -121,6 +169,8 @@ export default function App() {
   const [theme, setTheme] = useState('dark');
   const [activeModule, setActiveModule] = useState(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
   const t = i18n[lang];
   const assistantRef = useRef(null);
@@ -264,16 +314,38 @@ export default function App() {
 
             <div
               className="assistant-hint-bar"
-              onClick={openAssistantExternally}
               style={{
-                cursor: 'pointer',
                 marginTop: '40px',
                 userSelect: 'none'
               }}
             >
-              <p className="assistant-hint" style={{ pointerEvents: 'none' }}>
-                🤖 {t.assistant_hint}
-              </p>
+              <div 
+                className="assistant-hint-sector side-sector"
+                onClick={() => setShowLegalModal(true)}
+                style={{ cursor: 'pointer' }}
+              >
+                <p className="assistant-hint" style={{ pointerEvents: 'none' }}>
+                  {t.legal_note}
+                </p>
+              </div>
+              <div 
+                className="assistant-hint-sector center-sector" 
+                onClick={openAssistantExternally}
+                style={{ cursor: 'pointer' }}
+              >
+                <p className="assistant-hint" style={{ pointerEvents: 'none', margin: 0 }}>
+                  🤖 {t.assistant_hint}
+                </p>
+              </div>
+              <div 
+                className="assistant-hint-sector side-sector"
+                onClick={() => setShowWelcomeModal(true)}
+                style={{ cursor: 'pointer' }}
+              >
+                <p className="assistant-hint" style={{ pointerEvents: 'none' }}>
+                  {t.welcome}
+                </p>
+              </div>
             </div>
           </div>
         ) : (
@@ -312,6 +384,53 @@ export default function App() {
         <footer className="portal-footer">
           <p>{t.footer}</p>
         </footer>
+      )}
+
+      {/* ── LEGAL MODAL ──────────────────────────────────────────────── */}
+      {showLegalModal && (
+        <div className="legal-modal-overlay" onClick={() => setShowLegalModal(false)}>
+          <div className="legal-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="legal-modal-title">{t.legal_note}</h3>
+            <p className="legal-modal-text">{t.legal_text}</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── WELCOME MODAL ────────────────────────────────────────────── */}
+      {showWelcomeModal && (
+        <div className="legal-modal-overlay" onClick={() => setShowWelcomeModal(false)}>
+          <div className="legal-modal-content welcome-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="legal-modal-title" style={{ textAlign: 'center', color: 'var(--accent)', fontSize: '1.8rem' }}>
+              {t.welcome_title}
+            </h3>
+            
+            <div className="welcome-hero-text">
+              {t.welcome_text_1} <strong>EpiMétrika</strong>{t.welcome_text_2}
+            </div>
+
+            <div className="welcome-logo-text">
+              {t.welcome_logo_text}
+            </div>
+
+            <div className="welcome-footer-text">
+              <p>{t.welcome_v}</p>
+              <p>{t.welcome_author}</p>
+              <p>{t.welcome_endorsement}</p>
+              <p>{t.welcome_contact}</p>
+              <p>{t.welcome_citation}</p>
+            </div>
+            
+            <div style={{ textAlign: 'center', marginTop: '24px' }}>
+              <button 
+                className="back-btn" 
+                onClick={() => setShowWelcomeModal(false)}
+                style={{ fontSize: '1rem', padding: '10px 24px' }}
+              >
+                {lang === 'es' ? 'Cerrar' : lang === 'en' ? 'Close' : lang === 'pt' ? 'Fechar' : '关闭'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ASISTENTE CON REFERENCIA */}
